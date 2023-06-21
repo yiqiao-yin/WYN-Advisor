@@ -139,6 +139,14 @@ def plot_mkt_cap(df: pd.DataFrame) -> px.treemap:
     return fig
 
 
+st.markdown(
+    f"""
+        <h4 style='text-align: left;'>Market Cap Heatmap</h4>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 # plot heatmap
 fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
 st.plotly_chart(fig_market_cap_heatmap)
@@ -165,6 +173,14 @@ def plot_returns() -> plt.Figure:
     ax.set_ylabel("daily returns")
 
     return fig
+
+
+st.markdown(
+    f"""
+        <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
+    """,
+    unsafe_allow_html=True,
+)
 
 
 return_figure = plot_returns()
@@ -382,6 +398,16 @@ risk_free_rate = st.sidebar.select_slider(
 eff_front_figure, some_data = display_simulated_ef_with_random(
     mean_returns, cov_matrix, num_portfolios, risk_free_rate
 )
+
+
+st.markdown(
+    f"""
+        <h4 style='text-align: left;'>Asset Allocation Using Modern Portfolio Theory</h4>
+    """,
+    unsafe_allow_html=True,
+)
+
+
 st.markdown(
     f"""
         <h4 style='text-align: center;'>Efficient Portfolio:</h4>
