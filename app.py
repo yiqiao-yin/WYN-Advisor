@@ -11,5 +11,5 @@ st.markdown(
 
 ## Set up Sidebar
 st.sidebar.title("Sidebar")
-stocks = st.text_input('Enter stocks (sep. by comma)', 'AAPL, MSFT, NVDA, TSLA')
+stocks = st.sidebar.text_input('Enter stocks (sep. by comma)', 'AAPL, MSFT, NVDA, TSLA')
 
