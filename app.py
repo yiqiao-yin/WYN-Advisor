@@ -217,7 +217,7 @@ def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.n
     fig, ax = plt.subplots(figsize=(10, 7))
     ax.scatter(results[0,:],results[1,:],c=results[2,:],cmap='YlGnBu', marker='o', s=10, alpha=0.3)
     fig.colorbar(ax.scatter(sdp,rp,marker='*',color='r',s=500, label='Maximum Sharpe ratio'))
-    fig.colorbar(ax.scatter(sdp_min,rp_min,marker='*',color='g',s=500, label='Minimum volatility'))
+    # fig.colorbar(ax.scatter(sdp_min,rp_min,marker='*',color='g',s=500, label='Minimum volatility'))
     
     # Set the title, axis labels, and legend of the plot.
     ax.set_title('Simulated Portfolio Optimization based on Efficient Frontier')
@@ -225,43 +225,32 @@ def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.n
     ax.set_ylabel('annualised returns')
     plt.legend(labelspacing=0.8)
     
-    return fig
+    return fig, {
+        "Annualised Return": round(rp,2),
+        "Annualised Volatility": round(sdp,2),
+        "Max Sharpe Allocation": max_sharpe_allocation,
+        "Max Sharpe Allocation in Percentile": max_sharpe_allocation.div(max_sharpe_allocation.sum(axis=1), axis=0),
+        "Annualised Return": round(rp_min,2),
+        "Annualised Volatility": round(sdp_min,2),
+        "Min Volatility Allocation": min_vol_allocation,
+        "Min Volatility Allocation in Percentile": min_vol_allocation.div(min_vol_allocation.sum(axis=1), axis=0)
+    }
 
-
-
-
-
-    # print("-"*80)
-    # print("Maximum Sharpe Ratio Portfolio Allocation\n")
-    # print("Annualised Return:", round(rp,2))
-    # print("Annualised Volatility:", round(sdp,2))
-    # print("\n")
-    # print(max_sharpe_allocation)
-    # print("\n")
-    # print(max_sharpe_allocation.div(max_sharpe_allocation.sum(axis=1), axis=0))
-
-    # print("-"*80)
-    # print("Minimum Volatility Portfolio Allocation\n")
-    # print("Annualised Return:", round(rp_min,2))
-    # print("Annualised Volatility:", round(sdp_min,2))
-    # print("\n")
-    # print(min_vol_allocation)
-    # print("\n")
-    # print(min_vol_allocation.div(min_vol_allocation.sum(axis=1), axis=0))
 
 returns = table.pct_change()
 mean_returns = returns.mean()
 cov_matrix = returns.cov()
 
 # num_portfolios
-num_portfolios = st.select_slider(
+num_portfolios = st.sidebar.select_slider(
     'Select total number of portfolios to similuate',
     options=[10, 100, 1000, 5000, 10000])
 
 # risk_free_rate 
-risk_free_rate = st.select_slider(
+risk_free_rate = st.sidebar.select_slider(
     'Select simulated risk-free rate',
     options=[0.01, 0.015, 0.02, 0.025, 0.03])
 
-eff_front_figure = display_simulated_ef_with_random(mean_returns, cov_matrix, num_portfolios, risk_free_rate)
-st.pyplot(eff_front_figure )
+eff_front_figure, some_data = display_simulated_ef_with_random(mean_returns, cov_matrix, num_portfolios, risk_free_rate)
+st.write("Annualised Return: {round(rp,2)}")
+st.pyplot(eff_front_figure)
