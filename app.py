@@ -223,7 +223,7 @@ def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.n
     ax.set_title('Simulated Portfolio Optimization based on Efficient Frontier')
     ax.set_xlabel('annualised volatility')
     ax.set_ylabel('annualised returns')
-    plt.legend(labelspacing=0.8)
+    plt.legend(["Max Sharpe Ratio", "Min Volatility"])
     
     return fig, {
         "Annualised Return": round(rp,2),
