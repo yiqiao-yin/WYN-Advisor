@@ -258,18 +258,18 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-st.write(f"Annualised Return: {some_data["Annualised Return"]}")
-st.write(f"Annualised Volatility: {some_data["Annualised Volatility"]}")
-st.write(f"Max Sharpe Allocation: {some_data["Max Sharpe Allocation"]}")
-st.write(f"Max Sharpe Allocation in Percentile: {some_data["Max Sharpe Allocation in Percentile"]}")
+st.write(f"Annualised Return: {some_data['Annualised Return']}")
+st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
+st.write(f"Max Sharpe Allocation: {some_data['Max Sharpe Allocation']}")
+st.write(f"Max Sharpe Allocation in Percentile: {some_data['Max Sharpe Allocation in Percentile']}")
 st.markdown(
     f"""
         <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
     """,
     unsafe_allow_html=True,
 )
-st.write(f"Annualised Return: {some_data["Annualised Return"]}")
-st.write(f"Annualised Volatility: {some_data["Annualised Volatility"]}")
-st.write(f"Min Volatility Allocation: {some_data["Min Volatility Allocation"]}")
-st.write(f"Min Volatility Allocation in Percentile: {some_data["Min Volatility Allocation in Percentile"]}")
+st.write(f"Annualised Return: {some_data['Annualised Return']}")
+st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
+st.write(f"Min Volatility Allocation: {some_data['Min Volatility Allocation']}")
+st.write(f"Min Volatility Allocation in Percentile: {some_data['Min Volatility Allocation in Percentile']}")
 st.pyplot(eff_front_figure)
