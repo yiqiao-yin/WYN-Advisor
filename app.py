@@ -131,7 +131,7 @@ def plot_mkt_cap(df):
 
 # plot heatmap
 fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
-st.pyplot(fig_market_cap_heatmap)
+st.plotly_chart(fig_market_cap_heatmap)
 
 
 # Function: plot returns
