@@ -17,7 +17,10 @@ st.markdown(
 
 # Set up Sidebar
 st.sidebar.title("Sidebar")
-stocks = st.sidebar.text_input("Enter stocks (sep. by comma)", "AAPL, MSFT, NVDA, TSLA")
+stocks = st.sidebar.text_input(
+    "Enter stocks (sep. by comma)",
+    "AAPL, META, TSLA, AMZN, AMD, NVDA, IBM, TSM, MSFT, GOOGL, NFLX, VMW, VEEV, V, UNH, JPM, TMO",
+)
 
 
 # Function: download stocks
@@ -293,7 +296,7 @@ num_portfolios = st.sidebar.select_slider(
 risk_free_rate = st.sidebar.select_slider(
     "Select simulated risk-free rate",
     value=0.01,
-    options=[0.0001, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03]
+    options=[0.0001, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
 )
 
 eff_front_figure, some_data = display_simulated_ef_with_random(
@@ -308,11 +311,9 @@ st.markdown(
 st.write(f"Annualised Return: {some_data['Annualised Return']}")
 st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
 st.write(f"Max Sharpe Allocation:")
-st.table(some_data['Max Sharpe Allocation'])
-st.write(
-    f"Max Sharpe Allocation in Percentile:"
-)
-st.table(some_data['Max Sharpe Allocation in Percentile'])
+st.table(some_data["Max Sharpe Allocation"])
+st.write(f"Max Sharpe Allocation in Percentile:")
+st.table(some_data["Max Sharpe Allocation in Percentile"])
 st.markdown(
     f"""
         <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
@@ -322,17 +323,15 @@ st.markdown(
 st.write(f"Annualised Return: {some_data['Annualised Return']}")
 st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
 st.write(f"Min Volatility Allocation:")
-st.table(some_data['Min Volatility Allocation'])
-st.write(
-    f"Min Volatility Allocation in Percentile:"
-)
-st.table(some_data['Min Volatility Allocation in Percentile'])
+st.table(some_data["Min Volatility Allocation"])
+st.write(f"Min Volatility Allocation in Percentile:")
+st.table(some_data["Min Volatility Allocation in Percentile"])
 st.pyplot(eff_front_figure)
 
 
 st.markdown(
     f"""
-        <h5 style='text-align: center;'>Copyright © 2010-2023 Present Yiqiao Yin</h5>
+        <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
     """,
     unsafe_allow_html=True,
 )
