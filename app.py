@@ -146,7 +146,13 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-
+st.markdown(
+    r"""
+    I trade large cap stocks first, so I visualize data using market cap heatmap.
+    The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
+    model and the market cap is captured using the 2nd factor 'SMB'.
+    """
+)
 
 # plot heatmap
 fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
@@ -381,6 +387,15 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+st.markdown(
+    r"""
+    Among the large cap stocks, I trade a long run reversal strategy, and hence the visualization of returns from time-series plot and MPT.
+    The philosophy comes from the famous [Carhart 4-Factor](https://en.wikipedia.org/wiki/Carhart_four-factor_model)
+    model and the reversal strategy is captured using the 4th factor 'UMD'. If interested, one can 
+    trace the algorithm proposed from this [paper](https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.1997.tb03808.x).
+    """
+)
+st.warning("What is Modern Portolio Theory?")
 st.markdown(r"""
     The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
 
