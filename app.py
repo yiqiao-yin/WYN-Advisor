@@ -1,8 +1,10 @@
 import streamlit as st
 import yfinance as yf
+import numpy as np
 import pandas as pd
-from typing import List
+from typing import List, Tuple
 import matplotlib.pyplot as plt
+
 
 # Set up Title
 st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
@@ -17,7 +19,7 @@ st.markdown(
 st.sidebar.title("Sidebar")
 stocks = st.sidebar.text_input('Enter stocks (sep. by comma)', 'AAPL, MSFT, NVDA, TSLA')
 
-# Functions
+# Function: download stocks
 def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
     """
     Downloads stock data from Yahoo Finance.
@@ -54,7 +56,7 @@ table = pd.DataFrame([list_of_stocks[j]['Close'] for j in range(len(list_of_stoc
 # Set the column names to be the stocks symbols
 table.columns = stocks
 
-
+# Function: plot returns
 def _plot_returns() -> plt.Figure:
     """
     This function plots the daily returns of each stock contained in the DataFrame `table`.
@@ -82,3 +84,176 @@ st.write(f"""
     Plot daily returns of the stocks selected: {stocks}
 """)
 st.pyplot(return_figure)
+
+# Function: annual performance
+def portfolio_annualised_performance(weights: np.ndarray, mean_returns: np.ndarray, cov_matrix: np.ndarray) -> Tuple[float, float]:
+    """
+    Given the weights of the assets in the portfolio, their mean returns, and their covariance matrix,
+    this function computes and returns the annualized performance of the portfolio in terms of its
+    standard deviation (volatility) and expected returns.
+
+    Args:
+        weights (np.ndarray): The weights of the assets in the portfolio. 
+                              Each weight corresponds to the proportion of the investor's total 
+                              investment in the corresponding asset.
+                              
+        mean_returns (np.ndarray): The mean (expected) returns of the assets.
+        
+        cov_matrix (np.ndarray): The covariance matrix of the asset returns. Each entry at the 
+                                 intersection of a row and a column represents the covariance 
+                                 between the returns of the asset corresponding to that row 
+                                 and the asset corresponding to that column.
+
+    Returns:
+        Tuple of portfolio volatility (standard deviation) and portfolio expected return, both annualized.
+    """
+
+    # Annualize portfolio returns by summing up the products of the mean returns and weights of each asset and then multiplying by 252 
+    # (number of trading days in a year)
+    returns = np.sum(mean_returns*weights ) * 252
+
+    # Compute portfolio volatility (standard deviation) by dot multiplying the weights transpose and the dot product of covariance matrix 
+    # and weights. Then take the square root to get the standard deviation and multiply by square root of 252 to annualize it.
+    std = np.sqrt(np.dot(weights.T, np.dot(cov_matrix, weights))) * np.sqrt(252)
+
+    return std, returns
+
+
+# Function: random portfolio
+def random_portfolios(
+    num_portfolios: int,
+    num_weights: int,
+    mean_returns: np.ndarray,
+    cov_matrix: np.ndarray,
+    risk_free_rate: float) -> Tuple[np.ndarray, List[np.ndarray]]:
+    """
+    Generate random portfolios and calculate their standard deviation, returns and Sharpe ratio.
+
+    Args:
+        num_portfolios (int): The number of random portfolios to generate.
+        
+        mean_returns (np.ndarray): The mean (expected) returns of the assets.
+        
+        cov_matrix (np.ndarray): The covariance matrix of the asset returns. Each entry at the 
+                                 intersection of a row and a column represents the covariance 
+                                 between the returns of the asset corresponding to that row 
+                                 and the asset corresponding to that column.
+                                 
+        risk_free_rate (float): The risk-free rate of return.
+
+    Returns:
+        Tuple of results and weights_record.
+        
+        results (np.ndarray): A 3D array with standard deviation, returns and Sharpe ratio of the portfolios.
+        
+        weights_record (List[np.ndarray]): A list with the weights of the assets in each portfolio.
+    """
+    # Initialize results array with zeros
+    results = np.zeros((3, num_portfolios))
+
+    # Initialize weights record list
+    weights_record = []
+
+    # Loop over the range of num_portfolios
+    for i in np.arange(num_portfolios):
+        # Generate random weights
+        weights = np.random.random(num_weights)
+
+        # Normalize weights
+        weights /= np.sum(weights)
+
+        # Record weights
+        weights_record.append(weights)
+
+        # Calculate portfolio standard deviation and returns
+        portfolio_std_dev, portfolio_return = portfolio_annualised_performance(weights, mean_returns, cov_matrix)
+
+        # Store standard deviation, returns and Sharpe ratio in results
+        results[0,i] = portfolio_std_dev
+        results[1,i] = portfolio_return
+        results[2,i] = (portfolio_return - risk_free_rate) / portfolio_std_dev
+
+    return results, weights_record
+
+
+# Function: display simulated efficient frontier
+def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.ndarray, 
+                                      num_portfolios: int, risk_free_rate: float) -> plt.Figure:
+    """
+    This function displays a simulated efficient frontier plot based on randomly generated portfolios with the specified parameters. 
+
+    Args:
+    - mean_returns (List): A list of mean returns for each security or asset in the portfolio.
+    - cov_matrix (ndarray): A covariance matrix for the securities or assets in the portfolio.
+    - num_portfolios (int): The number of random portfolios to generate.
+    - risk_free_rate (float): The risk-free rate of return.
+
+    Returns:
+    - fig (plt.Figure): A pyplot figure object
+    """
+    
+    # Generate random portfolios using the specified parameters
+    results, weights = random_portfolios(num_portfolios, len(mean_returns), mean_returns, cov_matrix, risk_free_rate)
+    
+    # Find the maximum Sharpe ratio portfolio and the portfolio with minimum volatility
+    max_sharpe_idx = np.argmax(results[2])
+    sdp, rp = results[0,max_sharpe_idx], results[1,max_sharpe_idx]
+    
+    # Create a DataFrame of the maximum Sharpe ratio allocation
+    max_sharpe_allocation = pd.DataFrame(weights[max_sharpe_idx],index=table.columns,columns=['allocation'])
+    max_sharpe_allocation.allocation = [round(i*100,2)for i in max_sharpe_allocation.allocation]
+    max_sharpe_allocation = max_sharpe_allocation.T
+    
+    # Find index of the portfolio with minimum volatility
+    min_vol_idx = np.argmin(results[0])
+    sdp_min, rp_min = results[0,min_vol_idx], results[1,min_vol_idx]
+    
+    # Create a DataFrame of the minimum volatility allocation
+    min_vol_allocation = pd.DataFrame(weights[min_vol_idx],index=table.columns,columns=['allocation'])
+    min_vol_allocation.allocation = [round(i*100,2)for i in min_vol_allocation.allocation]
+    min_vol_allocation = min_vol_allocation.T
+
+    # Generate and plot the efficient frontier
+    fig, ax = plt.subplots(figsize=(10, 7))
+    ax.scatter(results[0,:],results[1,:],c=results[2,:],cmap='YlGnBu', marker='o', s=10, alpha=0.3)
+    fig.colorbar(ax.scatter(sdp,rp,marker='*',color='r',s=500, label='Maximum Sharpe ratio'))
+    fig.colorbar(ax.scatter(sdp_min,rp_min,marker='*',color='g',s=500, label='Minimum volatility'))
+    
+    # Set the title, axis labels, and legend of the plot.
+    ax.set_title('Simulated Portfolio Optimization based on Efficient Frontier')
+    ax.set_xlabel('annualised volatility')
+    ax.set_ylabel('annualised returns')
+    plt.legend(labelspacing=0.8)
+    
+    return fig
+
+
+
+
+
+    # print("-"*80)
+    # print("Maximum Sharpe Ratio Portfolio Allocation\n")
+    # print("Annualised Return:", round(rp,2))
+    # print("Annualised Volatility:", round(sdp,2))
+    # print("\n")
+    # print(max_sharpe_allocation)
+    # print("\n")
+    # print(max_sharpe_allocation.div(max_sharpe_allocation.sum(axis=1), axis=0))
+
+    # print("-"*80)
+    # print("Minimum Volatility Portfolio Allocation\n")
+    # print("Annualised Return:", round(rp_min,2))
+    # print("Annualised Volatility:", round(sdp_min,2))
+    # print("\n")
+    # print(min_vol_allocation)
+    # print("\n")
+    # print(min_vol_allocation.div(min_vol_allocation.sum(axis=1), axis=0))
+
+returns = table.pct_change()
+mean_returns = returns.mean()
+cov_matrix = returns.cov()
+num_portfolios = 10000
+risk_free_rate = 0.0178
+
+eff_front_figure = display_simulated_ef_with_random(mean_returns, cov_matrix, num_portfolios, risk_free_rate)
+st.pyplot(eff_front_figure )
