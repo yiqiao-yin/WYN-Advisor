@@ -333,6 +333,8 @@ st.table(some_data["Min Volatility Allocation in Percentile"])
 st.pyplot(eff_front_figure)
 
 
+
+st.warning("Note: Though stocks are the same, the weights decided by Mr. Yin is drastically different from the above allocation.")
 st.markdown(
     f"""
         <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
