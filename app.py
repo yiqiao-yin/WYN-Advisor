@@ -59,6 +59,7 @@ stocks = stocks.split(", ")
 
 # Get the list of stocks data using the `download_stocks` function
 list_of_stocks = download_stocks(stocks)
+st.success("Downloading latest stock data successfully!")
 
 # Create a DataFrame object from the closing prices of all stocks
 table = pd.DataFrame(
@@ -374,7 +375,12 @@ def display_simulated_ef_with_random(
         ),
     }
 
-
+st.markdown(
+    f"""
+        <h4 style='text-align: center;'>Modern Portfolio Theory</h4>
+    """,
+    unsafe_allow_html=True,
+)
 st.markdown(r"""
     The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
 
