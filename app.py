@@ -285,12 +285,15 @@ cov_matrix = returns.cov()
 # num_portfolios
 num_portfolios = st.sidebar.select_slider(
     "Select total number of portfolios to similuate",
+    value=5000,
     options=[10, 100, 1000, 5000, 10000],
 )
 
 # risk_free_rate
 risk_free_rate = st.sidebar.select_slider(
-    "Select simulated risk-free rate", options=[0.01, 0.015, 0.02, 0.025, 0.03]
+    "Select simulated risk-free rate",
+    value=0.01,
+    options=[0.0001, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03]
 )
 
 eff_front_figure, some_data = display_simulated_ef_with_random(
