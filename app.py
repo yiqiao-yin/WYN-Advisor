@@ -252,5 +252,24 @@ risk_free_rate = st.sidebar.select_slider(
     options=[0.01, 0.015, 0.02, 0.025, 0.03])
 
 eff_front_figure, some_data = display_simulated_ef_with_random(mean_returns, cov_matrix, num_portfolios, risk_free_rate)
-st.write("Annualised Return: {round(rp,2)}")
+st.markdown(
+    f"""
+        <h4 style='text-align: center;'>Efficient Portfolio:</h4>
+    """,
+    unsafe_allow_html=True,
+)
+st.write(f"Annualised Return: {some_data["Annualised Return"]}")
+st.write(f"Annualised Volatility: {some_data["Annualised Volatility"]}")
+st.write(f"Max Sharpe Allocation: {some_data["Max Sharpe Allocation"]}")
+st.write(f"Max Sharpe Allocation in Percentile: {some_data["Max Sharpe Allocation in Percentile"]}")
+st.markdown(
+    f"""
+        <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
+    """,
+    unsafe_allow_html=True,
+)
+st.write(f"Annualised Return: {some_data["Annualised Return"]}")
+st.write(f"Annualised Volatility: {some_data["Annualised Volatility"]}")
+st.write(f"Min Volatility Allocation: {some_data["Min Volatility Allocation"]}")
+st.write(f"Min Volatility Allocation in Percentile: {some_data["Min Volatility Allocation in Percentile"]}")
 st.pyplot(eff_front_figure)
