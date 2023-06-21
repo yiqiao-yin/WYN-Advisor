@@ -42,17 +42,39 @@ def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
 
     return df_list
 
+# `stocks` is a string of comma-separated stock symbols
 stocks = stocks.split(', ')
+
+# Get the list of stocks data using the `download_stocks` function
 list_of_stocks = download_stocks(stocks)
+
+# Create a DataFrame object from the closing prices of all stocks
 table = pd.DataFrame([list_of_stocks[j]['Close'] for j in range(len(list_of_stocks))]).transpose()
+
+# Set the column names to be the stocks symbols
 table.columns = stocks
 
-returns = table.pct_change()
-def _plot_returns():
-    plt.figure(figsize=(14, 7))
+
+def _plot_returns() -> plt.Figure:
+    """
+    This function plots the daily returns of each stock contained in the DataFrame `table`.
+
+    Returns:
+        fig: A `Figure` instance representing the entire figure.
+    """
+    # Calculate the daily percentage change of all stocks using the `pct_change` method.
+    returns = table.pct_change()
+
+    # Plot each stock's daily returns on the same graph using a for loop and the `plot` method of pyplot object.
+    fig, ax = plt.subplots(figsize=(14, 7))
     for c in returns.columns.values:
-        plt.plot(returns.index, returns[c], lw=3, alpha=0.8,label=c)
-    plt.legend(loc='upper right', fontsize=12)
-    plt.ylabel('daily returns')
+        ax.plot(returns.index, returns[c], lw=3, alpha=0.8,label=c)
+
+    # Add legend and y-axis label to the plot.
+    ax.legend(loc='upper right', fontsize=12)
+    ax.set_ylabel('daily returns')
+    
+    return fig
+
 
 st.pyplot(_plot_returns)
