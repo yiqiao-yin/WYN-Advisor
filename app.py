@@ -78,4 +78,7 @@ def _plot_returns() -> plt.Figure:
 
 
 return_figure = _plot_returns()
+st.write(f"""
+    Plot daily returns of the stocks selected: {stocks}
+""")
 st.pyplot(return_figure)
