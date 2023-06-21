@@ -402,14 +402,6 @@ eff_front_figure, some_data = display_simulated_ef_with_random(
 
 st.markdown(
     f"""
-        <h4 style='text-align: left;'>Asset Allocation Using Modern Portfolio Theory</h4>
-    """,
-    unsafe_allow_html=True,
-)
-
-
-st.markdown(
-    f"""
         <h4 style='text-align: center;'>Efficient Portfolio:</h4>
     """,
     unsafe_allow_html=True,
