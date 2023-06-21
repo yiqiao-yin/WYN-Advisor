@@ -22,6 +22,9 @@ stocks = st.sidebar.text_input(
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
 st.sidebar.write("All stocks held by Yiqiao Yin.")
+st.sidebar.markdown(
+    "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
+)
 
 
 # Function: download stocks
