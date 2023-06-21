@@ -474,7 +474,10 @@ st.pyplot(eff_front_figure)
 
 
 st.warning(
-    "Note: Though stocks are the same, the weights decided by Mr. Yin is drastically different from the above allocation."
+    "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
+)
+st.warning(
+    "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
 )
 st.markdown(
     f"""
