@@ -3,6 +3,7 @@ from typing import List, Tuple
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
+import plotly.express as px
 import streamlit as st
 import yfinance as yf
 
@@ -66,6 +67,71 @@ table = pd.DataFrame(
 
 # Set the column names to be the stocks symbols
 table.columns = stocks
+
+# Get info
+tickers = []
+deltas = []
+sectors = []
+market_caps = []
+
+for ticker in stocks:
+    try:
+        ## create Ticker object
+        stock = yf.Ticker(ticker)
+        tickers.append(ticker)
+
+        ## download info
+        info = stock.info
+
+        ## download sector
+        sectors.append(info["sector"])
+
+        ## download daily stock prices for 2 days
+        hist = stock.history("2d")
+
+        ## calculate change in stock price (from a trading day ago)
+        deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
+
+        ## calculate market cap
+        market_caps.append(info["sharesOutstanding"] * info["previousClose"])
+
+        ## add print statement to ensure code is running
+        print(f"downloaded {ticker}")
+    except Exception as e:
+        print(e)
+
+# create dataframe for market cap
+df_for_mkt_cap = pd.DataFrame(
+    {
+        "ticker": tickers,
+        "sector": sectors,
+        "delta": deltas,
+        "market_cap": market_caps,
+    }
+)
+color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+df_for_mkt_cap["colors"] = pd.cut(
+    df_for_mkt_cap["delta"],
+    bins=color_bin,
+    labels=["red", "indianred", "lightpink", "lightgreen", "lime", "green"],
+)
+
+
+# Function: plot market cap heatmap
+def plot_mkt_cap(df):
+    fig = px.treemap(
+        df,
+        path=[px.Constant("all"), "sector", "ticker"],
+        values="market_cap",
+        color="colors",
+        hover_data={"delta": ":.2p"},
+    )
+    return fig
+
+
+# plot heatmap
+fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
+st.pyplot(fig_market_cap_heatmap)
 
 
 # Function: plot returns
@@ -333,8 +399,9 @@ st.table(some_data["Min Volatility Allocation in Percentile"])
 st.pyplot(eff_front_figure)
 
 
-
-st.warning("Note: Though stocks are the same, the weights decided by Mr. Yin is drastically different from the above allocation.")
+st.warning(
+    "Note: Though stocks are the same, the weights decided by Mr. Yin is drastically different from the above allocation."
+)
 st.markdown(
     f"""
         <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
