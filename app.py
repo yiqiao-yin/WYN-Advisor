@@ -19,8 +19,9 @@ st.markdown(
 st.sidebar.title("Sidebar")
 stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
-    "AAPL, META, TSLA, AMZN, AMD, NVDA, IBM, TSM, MSFT, GOOGL, NFLX, VMW, VEEV, V, UNH, JPM, TMO",
+    "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
+st.sidebar.write("All stocks held by Yiqiao Yin.")
 
 
 # Function: download stocks
