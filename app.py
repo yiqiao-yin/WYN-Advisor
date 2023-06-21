@@ -118,7 +118,17 @@ df_for_mkt_cap["colors"] = pd.cut(
 
 
 # Function: plot market cap heatmap
-def plot_mkt_cap(df):
+def plot_mkt_cap(df: pd.DataFrame) -> px.treemap:
+    """Takes in a DataFrame of stock information and plots market cap treemap
+
+    Args:
+    df: pandas DataFrame containing the following columns - ticker, sector, market_cap, colors, delta
+
+    Returns:
+    fig : Plotly express treemap figure object showing the market cap and color-coded
+            according to the input "colors" column.
+    """
+    # Build and return the treemap figure
     fig = px.treemap(
         df,
         path=[px.Constant("all"), "sector", "ticker"],
