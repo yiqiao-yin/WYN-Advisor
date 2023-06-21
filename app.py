@@ -354,12 +354,10 @@ def display_simulated_ef_with_random(
     ax.scatter(
         sdp_min, rp_min, marker="*", color="g", s=500, label="Minimum volatility"
     )
-
-    # Set the title, axis labels, and legend of the plot.
     ax.set_title("Simulated Portfolio Optimization based on Efficient Frontier")
     ax.set_xlabel("annualised volatility")
     ax.set_ylabel("annualised returns")
-    plt.legend(["Max Sharpe Ratio", "Min Volatility"])
+    ax.legend(labelspacing=0.8)
 
     return fig, {
         "Annualised Return": round(rp, 2),
