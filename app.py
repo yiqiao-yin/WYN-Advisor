@@ -77,4 +77,5 @@ def _plot_returns() -> plt.Figure:
     return fig
 
 
-st.pyplot(_plot_returns)
+return_figure = _plot_returns()
+st.pyplot(return_figure)
