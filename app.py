@@ -216,8 +216,8 @@ def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.n
     # Generate and plot the efficient frontier
     fig, ax = plt.subplots(figsize=(10, 7))
     ax.scatter(results[0,:],results[1,:],c=results[2,:],cmap='YlGnBu', marker='o', s=10, alpha=0.3)
-    fig.colorbar(ax.scatter(sdp,rp,marker='*',color='r',s=500, label='Maximum Sharpe ratio'))
-    # fig.colorbar(ax.scatter(sdp_min,rp_min,marker='*',color='g',s=500, label='Minimum volatility'))
+    ax.scatter(sdp,rp,marker='*',color='r',s=500, label='Maximum Sharpe ratio')
+    ax.scatter(sdp_min,rp_min,marker='*',color='g',s=500, label='Minimum volatility')
     
     # Set the title, axis labels, and legend of the plot.
     ax.set_title('Simulated Portfolio Optimization based on Efficient Frontier')
