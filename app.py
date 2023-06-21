@@ -252,8 +252,16 @@ def display_simulated_ef_with_random(mean_returns: List[float], cov_matrix: np.n
 returns = table.pct_change()
 mean_returns = returns.mean()
 cov_matrix = returns.cov()
-num_portfolios = 10000
-risk_free_rate = 0.0178
+
+# num_portfolios
+num_portfolios = st.select_slider(
+    'Select total number of portfolios to similuate',
+    options=[10, 100, 1000, 5000, 10000])
+
+# risk_free_rate 
+risk_free_rate = st.select_slider(
+    'Select simulated risk-free rate',
+    options=[0.01, 0.015, 0.02, 0.025, 0.03])
 
 eff_front_figure = display_simulated_ef_with_random(mean_returns, cov_matrix, num_portfolios, risk_free_rate)
 st.pyplot(eff_front_figure )
