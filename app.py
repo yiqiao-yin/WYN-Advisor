@@ -479,6 +479,9 @@ st.warning(
 st.warning(
     "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
 )
+st.warning(
+    "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
+)
 st.markdown(
     f"""
         <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
