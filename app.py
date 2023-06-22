@@ -34,7 +34,7 @@ stocks = st.sidebar.text_input(
 #     #format="MM/DD/YY"
 # )
 # start_datetime, end_datetime = time_range
-start_datetime = st.sidebar.date_input('Start date', datetime(2014, 1, 1))
+start_datetime = st.sidebar.date_input('Start date', datetime(2014, 1, 1, 0, 0))
 end_datetime = st.sidebar.date_input('End date', datetime.today())
 st.sidebar.write(
     "Range selected: from ",
