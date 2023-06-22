@@ -25,8 +25,9 @@ stocks = st.sidebar.text_input(
 )
 time_range = st.sidebar.slider(
     "When do you start?",
-    value=(datetime(2020, 1, 1, 9, 30, 0), datetime(2022, 1, 1, 9, 0, 0)),
-    format="MM/DD/YY - hh:mm:ss")
+    value=(datetime(2010, 1, 1),
+           datetime.today()),
+    format="MM/DD/YY")
 
 st.sidebar.write("All stocks held by Yiqiao Yin.")
 st.sidebar.markdown(
