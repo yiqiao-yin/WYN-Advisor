@@ -45,7 +45,7 @@ risk_free_rate = st.sidebar.select_slider(
 with st.sidebar:
     with st.form(key="my_form"):
         submit_button = st.form_submit_button(label="Submit!")
-st.sidebar.write("All stocks held by Yiqiao Yin.")
+st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
 st.sidebar.markdown(
     "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
 )
