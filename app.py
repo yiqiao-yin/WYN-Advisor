@@ -90,6 +90,8 @@ table.columns = stocks
 # Filter by date range selected by user
 df = table
 st.write(str(type(df.index[0])))
+st.write(str(type(df.index[0])))
+st.write(str(type(start_datetime)))
 filtered_df = df[(df.index >= start_datetime) & (df.index <= end_datetime)]
 if filtered_df.shape[0] > 100:
     st.success("Data filtered by date range selected by user.")
