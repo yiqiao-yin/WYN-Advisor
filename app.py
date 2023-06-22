@@ -31,6 +31,17 @@ st.sidebar.write(
     " to ",
     str(end_datetime).split(' ')[0]
 )
+num_portfolios = st.sidebar.select_slider(
+    "Select total number of portfolios to similuate",
+    value=5000,
+    options=[10, 100, 200, 500, 1000, 2000, 5000, 8000, 10000],
+)
+risk_free_rate = st.sidebar.select_slider(
+    "Select simulated risk-free rate",
+    value=0.01,
+    options=list(np.sort([np.random.randint(0, 20) for i in range(20)])/20*0.05),
+)
+
 with st.sidebar:
     with st.form(key='my_form'):
         submit_button = st.form_submit_button(label='Submit!')
@@ -446,21 +457,6 @@ if submit_button:
     returns = table.pct_change()
     mean_returns = returns.mean()
     cov_matrix = returns.cov()
-
-    # Set num_portfolios
-    num_portfolios = st.sidebar.select_slider(
-        "Select total number of portfolios to similuate",
-        value=5000,
-        options=[10, 100, 1000, 5000, 10000],
-    )
-
-    # Set risk_free_rate
-    risk_free_rate = st.sidebar.select_slider(
-        "Select simulated risk-free rate",
-        value=0.01,
-        options=[0.0001, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03],
-    )
-
     eff_front_figure, some_data = display_simulated_ef_with_random(
         mean_returns, cov_matrix, num_portfolios, risk_free_rate
     )
