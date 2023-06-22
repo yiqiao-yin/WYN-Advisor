@@ -1,6 +1,6 @@
+from datetime import datetime
 from typing import List, Tuple
 
-from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -23,29 +23,28 @@ stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
-start_datetime = st.sidebar.date_input('Start date', datetime(2010, 1, 1))
-end_datetime = st.sidebar.date_input('End date', datetime.today())
+start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
+end_datetime = st.sidebar.date_input("End date", datetime.today())
 st.sidebar.write(
     "Range selected: from ",
-    str(start_datetime).split(' ')[0],
+    str(start_datetime).split(" ")[0],
     " to ",
-    str(end_datetime).split(' ')[0]
+    str(end_datetime).split(" ")[0],
 )
 num_portfolios = st.sidebar.select_slider(
     "Select total number of portfolios to similuate",
     value=5000,
     options=[10, 100, 200, 500, 1000, 2000, 5000, 8000, 10000],
 )
-list_of_rates = list(np.sort([np.random.randint(0, 20) for i in range(20)])/20*0.05)
 risk_free_rate = st.sidebar.select_slider(
     "Select simulated risk-free rate",
     value=0.01,
-    options=list_of_rates,
+    options=[0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.035, 0.04, 0.045, 0.05],
 )
 
 with st.sidebar:
-    with st.form(key='my_form'):
-        submit_button = st.form_submit_button(label='Submit!')
+    with st.form(key="my_form"):
+        submit_button = st.form_submit_button(label="Submit!")
 st.sidebar.write("All stocks held by Yiqiao Yin.")
 st.sidebar.markdown(
     "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
@@ -73,7 +72,7 @@ def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
         df = yf.download(ticker)
 
         # Add the DataFrame to the list.
-        df_list.append(df.tail(255*10))
+        df_list.append(df.tail(255 * 10))
 
     return df_list
 
@@ -306,6 +305,7 @@ def display_simulated_ef_with_random(
     }
 
 
+# Content starts here
 if submit_button:
     # List `stocks` is a string of comma-separated stock symbols
     stocks = stocks.split(", ")
@@ -333,8 +333,10 @@ if submit_button:
         st.success("Data filtered by date range selected by user.")
         table = filtered_df
     else:
-        st.warning("Date range by user not valid, default range (past 2 years) is used.")
-        table = table.tail(255*2)
+        st.warning(
+            "Date range by user not valid, default range (past 2 years) is used."
+        )
+        table = table.tail(255 * 2)
 
     # Get info
     tickers = []
@@ -433,7 +435,8 @@ if submit_button:
         """
     )
     st.warning("What is Modern Portolio Theory?")
-    st.markdown(r"""
+    st.markdown(
+        r"""
         The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
 
         Mathematically, the efficient frontier is the solution to the following optimization problem:
@@ -453,7 +456,8 @@ if submit_button:
         Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
 
         Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
-    """)
+    """
+    )
 
     returns = table.pct_change()
     mean_returns = returns.mean()
