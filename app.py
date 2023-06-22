@@ -448,11 +448,11 @@ if submit_button:
 
         Where:
 
-        - $w$ is a vector of portfolio weights. \n
-        - $\Sigma$ is the covariance matrix of asset returns. \n
-        - $\mu$ is the vector of expected asset returns. \n
-        - $\sigma_p$ is the portfolio standard deviation (risk). \n
-        - $R_p$ is the portfolio expected return. \n
+        - $w$ is a vector of portfolio weights.
+        - $\Sigma$ is the covariance matrix of asset returns.
+        - $\mu$ is the vector of expected asset returns.
+        - $\sigma_p$ is the portfolio standard deviation (risk).
+        - $R_p$ is the portfolio expected return.
         Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
 
         Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
