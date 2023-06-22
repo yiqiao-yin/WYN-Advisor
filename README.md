@@ -1,5 +1,7 @@
 # WYN Advisor: Portfolio Optimization Streamlit App
 
+!['../docs/main.gif']
+
 ## Overview
 
 This is a simple Streamlit app that allows users to generate an optimized portfolio allocation based on mean returns, covariance matrix and user inputs. The app calculates the efficient frontier and also identifies the portfolio with minimum variance.
