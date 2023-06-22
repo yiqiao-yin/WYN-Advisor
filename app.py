@@ -90,8 +90,8 @@ table.columns = stocks
 # Filter by date range selected by user
 df = table
 new_index = [df.index[t].date() for t in range(len(df.index))]
-check1 = tuple([new_index[t] >= start_datetime.date() for t in range(len(new_index))])
-check2 = tuple([new_index[t] <= end_datetime.date() for t in range(len(new_index))])
+check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
+check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
 filtered_df = df[check1 & check2]
 if filtered_df.shape[0] > 100:
     st.success("Data filtered by date range selected by user.")
