@@ -27,21 +27,21 @@ stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
-# time_range = st.sidebar.slider(
-#     "Select date range:",
-#     value=(datetime(2010, 1, 1),
-#            datetime.today()),
-#     #format="MM/DD/YY"
-# )
-# start_datetime, end_datetime = time_range
-start_datetime = st.sidebar.date_input('Start date', datetime(2010, 1, 1))
-end_datetime = st.sidebar.date_input('End date', datetime.today())
+time_range = st.sidebar.slider(
+    "Select date range:",
+    value=(datetime(2010, 1, 1),
+           datetime.today()),
+    #format="MM/DD/YY"
+)
+start_datetime, end_datetime = time_range
+a = st.sidebar.date_input('Start date', datetime(2010, 1, 1))
+b = st.sidebar.date_input('End date', datetime.today())
 st.sidebar.write(
     "Range selected: from ",
     str(start_datetime).split(' ')[0],
     " to ",
     str(end_datetime).split(' ')[0],
-    type(end_datetime))
+    type(a))
 
 
 # Function: download stocks
