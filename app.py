@@ -31,7 +31,8 @@ time_range = st.sidebar.slider(
     "Select date range:",
     value=(datetime(2010, 1, 1),
            datetime.today()),
-    format="MM/DD/YY")
+    #format="MM/DD/YY"
+)
 start_datetime, end_datetime = time_range
 st.sidebar.write(
     "Range selected: from ",
