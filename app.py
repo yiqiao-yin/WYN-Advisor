@@ -37,7 +37,7 @@ st.sidebar.write(
     "Range selected:",
     str(start_datetime).split(' ')[0],
     str(end_datetime).split(' ')[0])
-
+submit_button = st.sidebar.form_submit_button(label="Submit!")
 
 
 # Function: download stocks
