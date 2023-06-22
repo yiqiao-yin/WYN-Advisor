@@ -19,6 +19,10 @@ st.markdown(
 
 # Set up Sidebar
 st.sidebar.title("Sidebar")
+st.sidebar.write("All stocks held by Yiqiao Yin.")
+st.sidebar.markdown(
+    "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
+)
 stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
@@ -28,12 +32,8 @@ time_range = st.sidebar.slider(
     value=(datetime(2010, 1, 1),
            datetime.today()),
     format="MM/DD/YY")
-st.write("Date selected:", time_range)
+st.sidebar.write("Date selected:", time_range)
 
-st.sidebar.write("All stocks held by Yiqiao Yin.")
-st.sidebar.markdown(
-    "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
-)
 
 
 # Function: download stocks
