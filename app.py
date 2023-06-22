@@ -75,7 +75,7 @@ table = pd.DataFrame(
 table.columns = stocks
 
 # Present in streamlit
-st.table(table)
+st.table(table.head())
 
 # Get info
 tickers = []
