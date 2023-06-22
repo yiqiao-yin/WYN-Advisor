@@ -295,7 +295,7 @@ def display_simulated_ef_with_random(
 
 
 if submit_button:
-    # `stocks` is a string of comma-separated stock symbols
+    # List `stocks` is a string of comma-separated stock symbols
     stocks = stocks.split(", ")
 
     # Get the list of stocks data using the `download_stocks` function
@@ -329,7 +329,6 @@ if submit_button:
     deltas = []
     sectors = []
     market_caps = []
-
     for ticker in stocks:
         try:
             ## create Ticker object
@@ -356,7 +355,7 @@ if submit_button:
         except Exception as e:
             print(e)
 
-    # create dataframe for market cap
+    # Create dataframe for market cap
     df_for_mkt_cap = pd.DataFrame(
         {
             "ticker": tickers,
@@ -372,6 +371,7 @@ if submit_button:
         labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
     )
 
+    # Start new section: Market Cap
     st.markdown(
         f"""
             <h4 style='text-align: left;'>Market Cap Heatmap</h4>
@@ -386,18 +386,17 @@ if submit_button:
         """
     )
 
-    # plot heatmap
+    # Plot heatmap
     fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
     st.plotly_chart(fig_market_cap_heatmap)
 
+    # Start new section: Time-series Plot
     st.markdown(
         f"""
             <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
         """,
         unsafe_allow_html=True,
     )
-
-
     return_figure = plot_returns()
     st.write(
         f"""
@@ -406,6 +405,7 @@ if submit_button:
     )
     st.pyplot(return_figure)
 
+    # Start new section: MPT
     st.markdown(
         f"""
             <h4 style='text-align: center;'>Modern Portfolio Theory</h4>
@@ -433,16 +433,11 @@ if submit_button:
 
         Where:
 
-        - $w$ is a vector of portfolio weights.
-
-        - $\Sigma$ is the covariance matrix of asset returns.
-
-        - $\mu$ is the vector of expected asset returns.
-
-        - $\sigma_p$ is the portfolio standard deviation (risk).
-
-        - $R_p$ is the portfolio expected return.
-
+        - $w$ is a vector of portfolio weights. \n
+        - $\Sigma$ is the covariance matrix of asset returns. \n
+        - $\mu$ is the vector of expected asset returns. \n
+        - $\sigma_p$ is the portfolio standard deviation (risk). \n
+        - $R_p$ is the portfolio expected return. \n
         Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
 
         Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
@@ -452,14 +447,14 @@ if submit_button:
     mean_returns = returns.mean()
     cov_matrix = returns.cov()
 
-    # num_portfolios
+    # Set num_portfolios
     num_portfolios = st.sidebar.select_slider(
         "Select total number of portfolios to similuate",
         value=5000,
         options=[10, 100, 1000, 5000, 10000],
     )
 
-    # risk_free_rate
+    # Set risk_free_rate
     risk_free_rate = st.sidebar.select_slider(
         "Select simulated risk-free rate",
         value=0.01,
@@ -470,7 +465,7 @@ if submit_button:
         mean_returns, cov_matrix, num_portfolios, risk_free_rate
     )
 
-
+    # Start new section: Efficient Portfolio
     st.markdown(
         f"""
             <h4 style='text-align: center;'>Efficient Portfolio:</h4>
@@ -483,6 +478,8 @@ if submit_button:
     # st.table(some_data["Max Sharpe Allocation"])
     st.write(f"Max Sharpe Allocation in Percentile:")
     st.table(some_data["Max Sharpe Allocation in Percentile"])
+
+    # Start new section: Min Variance Portfolio
     st.markdown(
         f"""
             <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
