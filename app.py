@@ -114,7 +114,7 @@ color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
 df_for_mkt_cap["colors"] = pd.cut(
     df_for_mkt_cap["delta"],
     bins=color_bin,
-    labels=["red", "indianred", "lightpink", "lightgreen", "lime", "green"],
+    labels=["grey", "indianred", "lightpink", "lightgreen", "lime", "green"],
 )
 
 
