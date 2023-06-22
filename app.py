@@ -307,6 +307,10 @@ def display_simulated_ef_with_random(
 
 # Content starts here
 if submit_button:
+
+    # Set columns
+    col1, col2 = st.columns(2)
+
     # List `stocks` is a string of comma-separated stock symbols
     stocks = stocks.split(", ")
 
@@ -385,39 +389,44 @@ if submit_button:
         labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
     )
 
-    # Start new section: Market Cap
-    st.markdown(
-        f"""
-            <h4 style='text-align: left;'>Market Cap Heatmap</h4>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        r"""
-        I trade large cap stocks first, so I visualize data using market cap heatmap.
-        The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
-        model and the market cap is captured using the 2nd factor 'SMB'.
+    # Col1:
+    with col1:
+
+        # Start new section: Market Cap
+        st.markdown(
+            f"""
+                <h4 style='text-align: left;'>Market Cap Heatmap</h4>
+            """,
+            unsafe_allow_html=True,
+        )
+        st.markdown(
+            r"""
+            I trade large cap stocks first, so I visualize data using market cap heatmap.
+            The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
+            model and the market cap is captured using the 2nd factor 'SMB'.
+            """
+        )
+
+        # Plot heatmap
+        fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
+        st.plotly_chart(fig_market_cap_heatmap)
+
+    # Col2:
+    with col2:
+        # Start new section: Time-series Plot
+        st.markdown(
+            f"""
+                <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
+            """,
+            unsafe_allow_html=True,
+        )
+        return_figure = plot_returns()
+        st.write(
+            f"""
+            Plot daily returns of the stocks selected: {stocks}
         """
-    )
-
-    # Plot heatmap
-    fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
-    st.plotly_chart(fig_market_cap_heatmap)
-
-    # Start new section: Time-series Plot
-    st.markdown(
-        f"""
-            <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
-        """,
-        unsafe_allow_html=True,
-    )
-    return_figure = plot_returns()
-    st.write(
-        f"""
-        Plot daily returns of the stocks selected: {stocks}
-    """
-    )
-    st.pyplot(return_figure)
+        )
+        st.pyplot(return_figure)
 
     # Start new section: MPT
     st.markdown(
