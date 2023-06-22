@@ -21,7 +21,7 @@ st.markdown(
 st.sidebar.title("Sidebar")
 stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma and space, e.g. ', ')",
-    "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
+    "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX, AVGO, PEP, COST, ADBE, CSCO, AMD, CMCSA, TXN, QCOM, HON, INTU, AMGN, AMAT, SBUX, ISRG, MDLZ, GILD, ADI, ADP, VRTX, REGN, PYPL, MU, CSX, MCHP",
 )
 start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
 end_datetime = st.sidebar.date_input("End date", datetime.today())
