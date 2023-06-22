@@ -88,27 +88,6 @@ def plot_mkt_cap(df: pd.DataFrame) -> px.treemap:
     return fig
 
 
-if submit_button:
-    st.markdown(
-        f"""
-            <h4 style='text-align: left;'>Market Cap Heatmap</h4>
-        """,
-        unsafe_allow_html=True,
-    )
-    st.markdown(
-        r"""
-        I trade large cap stocks first, so I visualize data using market cap heatmap.
-        The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
-        model and the market cap is captured using the 2nd factor 'SMB'.
-        """
-    )
-
-    # plot heatmap
-    fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
-    st.plotly_chart(fig_market_cap_heatmap)
-else:
-    st.warning("Please click the submit button!")
-
 # Function: plot returns
 def plot_returns() -> plt.Figure:
     """
@@ -392,6 +371,24 @@ if submit_button:
         bins=color_bin,
         labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
     )
+
+    st.markdown(
+        f"""
+            <h4 style='text-align: left;'>Market Cap Heatmap</h4>
+        """,
+        unsafe_allow_html=True,
+    )
+    st.markdown(
+        r"""
+        I trade large cap stocks first, so I visualize data using market cap heatmap.
+        The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
+        model and the market cap is captured using the 2nd factor 'SMB'.
+        """
+    )
+
+    # plot heatmap
+    fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
+    st.plotly_chart(fig_market_cap_heatmap)
 
     st.markdown(
         f"""
