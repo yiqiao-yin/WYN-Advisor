@@ -27,20 +27,15 @@ stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
-slider = st.sidebar.slider(
-    'Select date',
-    min_value=datetime(2010, 1, 1),
-    value=(datetime(2010, 1, 1),
-           datetime.today()),
-    max_value=datetime.today(),
-    format="MM/DD/YY")
-time_range = st.sidebar.slider(
-    "Select date range:",
-    value=(datetime(2010, 1, 1),
-           datetime.today()),
-    #format="MM/DD/YY"
-)
-start_datetime, end_datetime = time_range
+# time_range = st.sidebar.slider(
+#     "Select date range:",
+#     value=(datetime(2010, 1, 1),
+#            datetime.today()),
+#     #format="MM/DD/YY"
+# )
+# start_datetime, end_datetime = time_range
+start_datetime = st.sidebar.date_input('Start date', datetime(2010, 1, 1))
+end_datetime = st.sidebar.date_input('End date', datetime.today())
 st.sidebar.write(
     "Range selected: from ",
     str(start_datetime).split(' ')[0],
