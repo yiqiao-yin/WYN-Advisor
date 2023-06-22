@@ -32,7 +32,11 @@ time_range = st.sidebar.slider(
     value=(datetime(2010, 1, 1),
            datetime.today()),
     format="MM/DD/YY")
-st.sidebar.write("Date selected:", time_range)
+start_datetime, end_datetime = time_range
+st.sidebar.write(
+    "Range selected:",
+    str(start_datetime).split(' ')[0],
+    str(end_datetime).split(' ')[0])
 
 
 
@@ -74,11 +78,21 @@ table = pd.DataFrame(
     [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
 ).transpose()
 
+
 # Set the column names to be the stocks symbols
 table.columns = stocks
 
-# Present in streamlit
-st.table(table.head())
+
+# Filter by date range selected by user
+df = table
+filtered_df = df[(df.index >= start_datetime) & (df.index <= end_datetime)]
+if filtered_df.shape[0] > 100:
+    st.success("Data filtered by date range selected by user.")
+    table = filtered_df
+else:
+    st.warning("Date range by user not valid, default range (past 2 years) is used.")
+    table = table.tail(255*2)
+
 
 # Get info
 tickers = []
