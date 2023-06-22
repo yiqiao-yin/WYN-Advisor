@@ -65,86 +65,6 @@ def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
 
     return df_list
 
-if submit_button:
-    # `stocks` is a string of comma-separated stock symbols
-    stocks = stocks.split(", ")
-
-    # Get the list of stocks data using the `download_stocks` function
-    list_of_stocks = download_stocks(stocks)
-    st.success("Downloading latest stock data successfully!")
-
-    # Create a DataFrame object from the closing prices of all stocks
-    table = pd.DataFrame(
-        [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
-    ).transpose()
-
-    # Set the column names to be the stocks symbols
-    table.columns = stocks
-
-    # Filter by date range selected by user
-    df = table
-    new_index = [df.index[t].date() for t in range(len(df.index))]
-    check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
-    check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
-    final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
-    filtered_df = df[final_idx]
-    if filtered_df.shape[0] > 100:
-        st.success("Data filtered by date range selected by user.")
-        table = filtered_df
-    else:
-        st.warning("Date range by user not valid, default range (past 2 years) is used.")
-        table = table.tail(255*2)
-
-    # Get info
-    tickers = []
-    deltas = []
-    sectors = []
-    market_caps = []
-
-    for ticker in stocks:
-        try:
-            ## create Ticker object
-            stock = yf.Ticker(ticker)
-            tickers.append(ticker)
-
-            ## download info
-            info = stock.info
-
-            ## download sector
-            sectors.append(info["sector"])
-
-            ## download daily stock prices for 2 days
-            hist = stock.history("2d")
-
-            ## calculate change in stock price (from a trading day ago)
-            deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
-
-            ## calculate market cap
-            market_caps.append(info["sharesOutstanding"] * info["previousClose"])
-
-            ## add print statement to ensure code is running
-            print(f"downloaded {ticker}")
-        except Exception as e:
-            print(e)
-
-    # create dataframe for market cap
-    df_for_mkt_cap = pd.DataFrame(
-        {
-            "ticker": tickers,
-            "sector": sectors,
-            "delta": deltas,
-            "market_cap": market_caps,
-        }
-    )
-    color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
-    df_for_mkt_cap["colors"] = pd.cut(
-        df_for_mkt_cap["delta"],
-        bins=color_bin,
-        labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
-    )
-else:
-    st.warning("Please click the submit button!")
-
 
 # Function: plot market cap heatmap
 def plot_mkt_cap(df: pd.DataFrame) -> px.treemap:
@@ -210,26 +130,6 @@ def plot_returns() -> plt.Figure:
     ax.set_ylabel("daily returns")
 
     return fig
-
-
-if submit_button:
-    st.markdown(
-        f"""
-            <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
-        """,
-        unsafe_allow_html=True,
-    )
-
-
-    return_figure = plot_returns()
-    st.write(
-        f"""
-        Plot daily returns of the stocks selected: {stocks}
-    """
-    )
-    st.pyplot(return_figure)
-else:
-    st.warning("Please click the submit button!")
 
 
 # Function: annual performance
@@ -416,6 +316,99 @@ def display_simulated_ef_with_random(
 
 
 if submit_button:
+    # `stocks` is a string of comma-separated stock symbols
+    stocks = stocks.split(", ")
+
+    # Get the list of stocks data using the `download_stocks` function
+    list_of_stocks = download_stocks(stocks)
+    st.success("Downloading latest stock data successfully!")
+
+    # Create a DataFrame object from the closing prices of all stocks
+    table = pd.DataFrame(
+        [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
+    ).transpose()
+
+    # Set the column names to be the stocks symbols
+    table.columns = stocks
+
+    # Filter by date range selected by user
+    df = table
+    new_index = [df.index[t].date() for t in range(len(df.index))]
+    check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
+    check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
+    final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
+    filtered_df = df[final_idx]
+    if filtered_df.shape[0] > 100:
+        st.success("Data filtered by date range selected by user.")
+        table = filtered_df
+    else:
+        st.warning("Date range by user not valid, default range (past 2 years) is used.")
+        table = table.tail(255*2)
+
+    # Get info
+    tickers = []
+    deltas = []
+    sectors = []
+    market_caps = []
+
+    for ticker in stocks:
+        try:
+            ## create Ticker object
+            stock = yf.Ticker(ticker)
+            tickers.append(ticker)
+
+            ## download info
+            info = stock.info
+
+            ## download sector
+            sectors.append(info["sector"])
+
+            ## download daily stock prices for 2 days
+            hist = stock.history("2d")
+
+            ## calculate change in stock price (from a trading day ago)
+            deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
+
+            ## calculate market cap
+            market_caps.append(info["sharesOutstanding"] * info["previousClose"])
+
+            ## add print statement to ensure code is running
+            print(f"downloaded {ticker}")
+        except Exception as e:
+            print(e)
+
+    # create dataframe for market cap
+    df_for_mkt_cap = pd.DataFrame(
+        {
+            "ticker": tickers,
+            "sector": sectors,
+            "delta": deltas,
+            "market_cap": market_caps,
+        }
+    )
+    color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+    df_for_mkt_cap["colors"] = pd.cut(
+        df_for_mkt_cap["delta"],
+        bins=color_bin,
+        labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
+    )
+
+    st.markdown(
+        f"""
+            <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+    return_figure = plot_returns()
+    st.write(
+        f"""
+        Plot daily returns of the stocks selected: {stocks}
+    """
+    )
+    st.pyplot(return_figure)
+
     st.markdown(
         f"""
             <h4 style='text-align: center;'>Modern Portfolio Theory</h4>
