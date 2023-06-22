@@ -46,6 +46,8 @@ with st.sidebar:
     with st.form(key='my_form'):
         submit_button = st.form_submit_button(label='Submit!')
 
+st.sidebar.write(str(submit_button))
+
 # Function: download stocks
 def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
     """
