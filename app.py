@@ -27,8 +27,7 @@ stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
-cols1, _ = st.beta_columns((1,2))
-slider = cols1.sidebar.slider(
+slider = st.sidebar.slider(
     'Select date',
     min_value=datetime(2010, 1, 1),
     value=(datetime(2010, 1, 1),
