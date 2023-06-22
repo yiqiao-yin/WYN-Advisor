@@ -69,6 +69,9 @@ table = pd.DataFrame(
 # Set the column names to be the stocks symbols
 table.columns = stocks
 
+# Present in streamlit
+st.table(table)
+
 # Get info
 tickers = []
 deltas = []
