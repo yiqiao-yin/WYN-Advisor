@@ -20,7 +20,7 @@ st.markdown(
 # Set up Sidebar
 st.sidebar.title("Sidebar")
 stocks = st.sidebar.text_input(
-    "Enter stocks (sep. by comma)",
+    "Enter stocks (sep. by comma and space, e.g. ', ')",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
 start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
