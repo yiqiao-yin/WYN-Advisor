@@ -1,5 +1,6 @@
 from typing import List, Tuple
 
+from datetime import datetime
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -22,6 +23,10 @@ stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma)",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
 )
+time_range = st.sidebar.slider(
+    "When do you start?",
+    value=datetime(2020, 1, 1, 9, 30, 00),
+    format="MM/DD/YY - hh:mm:ss")
 st.sidebar.write("All stocks held by Yiqiao Yin.")
 st.sidebar.markdown(
     "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
@@ -49,7 +54,7 @@ def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
         df = yf.download(ticker)
 
         # Add the DataFrame to the list.
-        df_list.append(df.tail(400))
+        df_list.append(df.tail(255*10))
 
     return df_list
 
