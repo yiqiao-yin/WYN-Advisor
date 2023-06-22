@@ -285,8 +285,8 @@ def display_simulated_ef_with_random(
         sdp_min, rp_min, marker="*", color="g", s=500, label="Minimum volatility"
     )
     ax.set_title("Simulated Portfolio Optimization based on Efficient Frontier")
-    ax.set_xlabel("annualised volatility")
-    ax.set_ylabel("annualised returns")
+    ax.set_xlabel("Annual volatility")
+    ax.set_ylabel("Annual returns")
     ax.legend(labelspacing=0.8)
 
     return fig, {
