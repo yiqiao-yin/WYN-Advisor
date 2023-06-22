@@ -36,10 +36,11 @@ num_portfolios = st.sidebar.select_slider(
     value=5000,
     options=[10, 100, 200, 500, 1000, 2000, 5000, 8000, 10000],
 )
+list_of_rates = list(np.sort([np.random.randint(0, 20) for i in range(20)])/20*0.05)
 risk_free_rate = st.sidebar.select_slider(
     "Select simulated risk-free rate",
     value=0.01,
-    options=list(np.sort([np.random.randint(0, 20) for i in range(20)])/20*0.05),
+    options=list_of_rates,
 )
 
 with st.sidebar:
