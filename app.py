@@ -34,13 +34,14 @@ stocks = st.sidebar.text_input(
 #     #format="MM/DD/YY"
 # )
 # start_datetime, end_datetime = time_range
-start_datetime = st.sidebar.date_input('Start date', datetime(2014, 1, 1, 0, 0))
+start_datetime = st.sidebar.date_input('Start date', datetime(2010, 1, 1))
 end_datetime = st.sidebar.date_input('End date', datetime.today())
 st.sidebar.write(
     "Range selected: from ",
     str(start_datetime).split(' ')[0],
     " to ",
-    str(end_datetime).split(' ')[0])
+    str(end_datetime).split(' ')[0],
+    type(end_datetime))
 
 
 # Function: download stocks
