@@ -42,7 +42,9 @@ st.sidebar.write(
     " to ",
     str(end_datetime).split(' ')[0]
 )
-
+with st.sidebar:
+    with st.form(key='my_form'):
+        submit_button = st.form_submit_button(label='Submit!')
 
 # Function: download stocks
 def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
