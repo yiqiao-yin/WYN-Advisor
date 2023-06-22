@@ -92,7 +92,8 @@ df = table
 new_index = [df.index[t].date() for t in range(len(df.index))]
 check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
 check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
-filtered_df = df[check1 & check2]
+final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
+filtered_df = df[final_idx]
 if filtered_df.shape[0] > 100:
     st.success("Data filtered by date range selected by user.")
     table = filtered_df
