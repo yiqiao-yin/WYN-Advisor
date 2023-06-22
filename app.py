@@ -41,7 +41,8 @@ st.sidebar.write(
     str(start_datetime).split(' ')[0],
     " to ",
     str(end_datetime).split(' ')[0],
-    str(type(a)))
+    str(type(a)),
+    str(type(start_datetime)))
 
 
 # Function: download stocks
