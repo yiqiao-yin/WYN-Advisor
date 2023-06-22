@@ -1,6 +1,8 @@
 # WYN Advisor: Portfolio Optimization Streamlit App
 
-!['../docs/main.gif']
+<p>
+    <img src="https://github.com/yiqiao-yin/WYN-Advisor/blob/main/docs/main.gif" width=800></img>
+</p>
 
 ## Overview
 
