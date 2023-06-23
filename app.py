@@ -434,7 +434,7 @@ if submit_button:
         trace the algorithm proposed from this [paper](https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.1997.tb03808.x).
         """
     )
-    st.warning("What is Modern Portolio Theory?")
+    st.warning("What is Efficient Frontier?")
     st.markdown(
         r"""
         The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
