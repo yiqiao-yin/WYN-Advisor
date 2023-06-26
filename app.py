@@ -645,6 +645,8 @@ if option == 'Portfolio Management':
         st.warning(
             "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
         )
+    else:
+        st.warning("Please select an option and click the submit button!")
 elif option == 'Entry Strategy':
     if submit_button:
         st.markdown(
@@ -688,6 +690,8 @@ elif option == 'Entry Strategy':
         st.warning(
             "Note (2): Mr. Yin currently doesn't execute any exit strategy. Holding a stock is like marriage. Mr. Yin does not believe in short term profits and it certainly does not fulfil fiduciary by his experience. For starters, think about the tax you pay."
         )
+    else:
+        st.warning("Please select an option and click the submit button!")
 else:
     st.warning("Please select an option and click the submit button!")
 
