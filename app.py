@@ -637,6 +637,23 @@ if option == 'Portfolio Management':
         st.pyplot(eff_front_figure)
 elif option == 'Entry Strategy':
     if submit_button:
+        st.markdown(
+            r"""
+            The Relative Strength Index ([RSI](https://www.investopedia.com/terms/r/rsi.asp)) 
+            is a momentum oscillator that determines the pace and variation of security prices.
+            It is usually depicted graphically and oscillates on a scale of zero to 100.
+
+            The RSI oscillates on a scale of zero to 100. Low RSI levels, below 30, generate 
+            buy signals and indicate an oversold or undervalued condition. High RSI levels, 
+            above 70, generate sell signals and suggest that a security is overbought or 
+            overvalued. A reading of 50 denotes a neutral level or balance between bullish 
+            and bearish positions.
+
+            We allow users to select the number of days for RSI (this is one of the input 
+            text area on the left sidebar). We also allow users to select the range to 
+            measure margin of error, e.g. default values are (20, 80).
+            """
+        )
         # Start new section: Entry Strategy
         st.markdown(
             f"""
