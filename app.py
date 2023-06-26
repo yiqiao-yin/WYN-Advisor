@@ -60,7 +60,7 @@ elif option == 'Entry Strategy':
         "Enter 3 integers for number of past days to construct RSI (sep. by comma and space):", "12, 26, 50"
     )
     thresholds_values = st.sidebar.slider(
-        "Select a range of values to infer margin of error", 0, 100, (25, 75)
+        "Select a range of values to infer margin of error", 0.0, 100.0, (20.0, 80.0)
     )
     with st.sidebar:
         with st.form(key="my_form"):
@@ -676,8 +676,8 @@ elif option == 'Entry Strategy':
             end_date=str(end_datetime).split(" ")[0],
             tickers=this_stock,
             thresholds=rsi_thresholds,
-            buy_threshold=str(thresholds_values[0]),
-            sell_threshold=str(thresholds_values[1]),
+            buy_threshold=thresholds_values[0],
+            sell_threshold=thresholds_values[1],
         )
         st.pyplot(entry_plot)
         st.warning(
