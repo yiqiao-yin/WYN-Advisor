@@ -20,6 +20,11 @@ st.markdown(
 
 # Set up Sidebar
 st.sidebar.title("Sidebar")
+option = st.sidebar.selectbox(
+    'Which strategy do you want to see?',
+    ('Portfolio Management', 'Entry Strategy'))
+st.sidebar.write('You selected:', option)
+
 stocks = st.sidebar.text_input(
     "Enter stocks (sep. by comma and space, e.g. ', ')",
     "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX, AVGO, PEP, COST, ADBE, CSCO, CMCSA, TXN, QCOM, HON, INTU, AMGN, AMAT, SBUX, ISRG, MDLZ, GILD, ADI, ADP, VRTX, REGN, PYPL, MU, CSX, MCHP",
@@ -612,6 +617,13 @@ if submit_button:
     st.table(some_data["Min Volatility Allocation in Percentile"])
     st.pyplot(eff_front_figure)
 
+    # Start new section: Entry Strategy
+    st.markdown(
+        f"""
+            <h4 style='text-align: center;'>Entry Strategy:</h4>
+        """,
+        unsafe_allow_html=True,
+    )
     st.write(f"Pick a stock you like and review entry strategy.")
     this_stock = st.text_input("Enter a ticker of a stock you like:", "AAPL")
     rsi_thresholds = st.text_input(
