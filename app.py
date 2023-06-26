@@ -305,6 +305,122 @@ def display_simulated_ef_with_random(
     }
 
 
+def entry_strategy(
+    start_date="2013-01-01",
+    end_date="2019-12-6",
+    tickers="AAPL",
+    thresholds="10, 20, 30",
+    buy_threshold=20,
+    sell_threshold=80,
+):
+    rsi_threshold_1 = int(thresholds.split(",")[0])
+    rsi_threshold_2 = int(thresholds.split(",")[1])
+    rsi_threshold_3 = int(thresholds.split(",")[2])
+
+    # Conditional Buy/Sell => Signals
+    stock = yf.download(tickers, start_date, end_date)
+    rsiData1 = RSIIndicator(stock["Close"], rsi_threshold_1, True)
+    rsiData2 = RSIIndicator(stock["Close"], rsi_threshold_2, True)
+    rsiData3 = RSIIndicator(stock["Close"], rsi_threshold_3, True)
+
+    # Conditional Buy/Sell => Signals
+    conditionalBuy1 = np.where(rsiData1.rsi() < buy_threshold, stock["Close"], np.nan)
+    conditionalSell1 = np.where(rsiData1.rsi() > sell_threshold, stock["Close"], np.nan)
+    conditionalBuy2 = np.where(rsiData2.rsi() < buy_threshold, stock["Close"], np.nan)
+    conditionalSell2 = np.where(rsiData2.rsi() > sell_threshold, stock["Close"], np.nan)
+    conditionalBuy3 = np.where(rsiData3.rsi() < buy_threshold, stock["Close"], np.nan)
+    conditionalSell3 = np.where(rsiData3.rsi() > sell_threshold, stock["Close"], np.nan)
+
+    # RSI Construction
+    stock["RSI1"] = rsiData1.rsi()
+    stock["RSI2"] = rsiData2.rsi()
+    stock["RSI3"] = rsiData3.rsi()
+    stock["RSI1_Buy"] = conditionalBuy1
+    stock["RSI1_Sell"] = conditionalSell1
+    stock["RSI2_Buy"] = conditionalBuy2
+    stock["RSI2_Sell"] = conditionalSell2
+    stock["RSI3_Buy"] = conditionalBuy3
+    stock["RSI3_Sell"] = conditionalSell3
+
+    strategy = "RSI"
+    title = f"Close Price Buy/Sell Signals using WYN Entry Strategy"
+
+    fig, axs = plt.subplots(2, sharex=True, figsize=(13, 9))
+
+    if not stock["RSI1_Buy"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI1_Buy"],
+            color="green",
+            label="Buy Signal 1",
+            marker="^",
+            alpha=1,
+        )
+    if not stock["RSI1_Sell"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI1_Sell"],
+            color="red",
+            label="Sell Signal 1",
+            marker="v",
+            alpha=1,
+        )
+    axs[0].plot(stock["Close"], label="Close Price", color="blue", alpha=0.35)
+
+    if not stock["RSI2_Buy"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI2_Buy"],
+            color="blue",
+            label="Buy Signal 2",
+            marker="^",
+            alpha=1,
+        )
+    if not stock["RSI2_Sell"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI2_Sell"],
+            color="purple",
+            label="Sell Signal 2",
+            marker="v",
+            alpha=1,
+        )
+    axs[0].plot(stock["Close"], label="Close Price", color="blue", alpha=0.35)
+
+    if not stock["RSI3_Buy"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI3_Buy"],
+            color="cyan",
+            label="Buy Signal 3",
+            marker="^",
+            alpha=1,
+        )
+    if not stock["RSI3_Sell"].isnull().all():
+        axs[0].scatter(
+            stock.index,
+            stock["RSI3_Sell"],
+            color="pink",
+            label="Sell Signal 3",
+            marker="v",
+            alpha=1,
+        )
+    axs[0].plot(stock["Close"], label="Close Price", color="blue", alpha=0.35)
+
+    # plt.xticks(rotation=45)
+    axs[0].set_title(title)
+    axs[0].set_xlabel("Date", fontsize=18)
+    axs[0].set_ylabel("Close Price", fontsize=18)
+    axs[0].legend(loc="upper left")
+    axs[0].grid()
+
+    axs[1].plot(stock["RSI1"], label="RSI", color="green")
+    axs[1].plot(stock["RSI2"], label="RSI", color="blue")
+    axs[1].plot(stock["RSI3"], label="RSI", color="red")
+
+    return fig
+
+
 # Content starts here
 if submit_button:
     # List `stocks` is a string of comma-separated stock symbols
@@ -494,6 +610,24 @@ if submit_button:
     st.write(f"Min Volatility Allocation in Percentile:")
     st.table(some_data["Min Volatility Allocation in Percentile"])
     st.pyplot(eff_front_figure)
+
+    st.write(f"Pick a stock you like and review entry strategy.")
+    this_stock = st.text_input("Enter a ticker of a stock you like:", "AAPL")
+    rsi_thresholds = st.text_input(
+        "Enter 3 integers for RSI thresholds (sep. by comma and space):", "10, 20, 30"
+    )
+    thresholds_values = st.slider(
+        "Select a range of values to infer margin of error", 0.0, 100.0, (20.0, 80.0)
+    )
+    entry_plot = entry_strategy(
+        start_date=str(start_datetime).split(" ")[0],
+        end_date=str(end_datetime).split(" ")[0],
+        tickers=this_stock,
+        thresholds=rsi_thresholds,
+        buy_threshold=thresholds_values[0],
+        sell_threshold=thresholds_values[1],
+    )
+    st.pyplot(entry_plot)
 else:
     st.warning("Please click the submit button!")
 
