@@ -60,7 +60,7 @@ elif option == 'Entry Strategy':
         "Enter 3 integers for number of past days to construct RSI (sep. by comma and space):", "12, 26, 50"
     )
     thresholds_values = st.sidebar.slider(
-        "Select a range of values to infer margin of error", 0.0, 100.0, (20.0, 80.0)
+        "Select a range of values to infer margin of error", 0.0, 100.0, (25.0, 75.0)
     )
     with st.sidebar:
         with st.form(key="my_form"):
