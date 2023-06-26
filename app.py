@@ -57,10 +57,10 @@ elif option == 'Entry Strategy':
     end_datetime = st.sidebar.date_input("End date", datetime.today())
     this_stock = st.sidebar.text_input("Enter a ticker of a stock you like:", "AAPL")
     rsi_thresholds = st.sidebar.text_input(
-        "Enter 3 integers for RSI thresholds (sep. by comma and space):", "10, 20, 30"
+        "Enter 3 integers for number of past days to construct RSI (sep. by comma and space):", "12, 26, 50"
     )
     thresholds_values = st.sidebar.slider(
-        "Select a range of values to infer margin of error", 0.0, 100.0, (20.0, 80.0)
+        "Select a range of values to infer margin of error", 0, 100, (25, 75)
     )
     with st.sidebar:
         with st.form(key="my_form"):
@@ -635,6 +635,15 @@ if option == 'Portfolio Management':
         st.write(f"Min Volatility Allocation in Percentile:")
         st.table(some_data["Min Volatility Allocation in Percentile"])
         st.pyplot(eff_front_figure)
+        st.warning(
+            "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
+        )
+        st.warning(
+            "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
+        )
+        st.warning(
+            "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
+        )
 elif option == 'Entry Strategy':
     if submit_button:
         st.markdown(
@@ -667,23 +676,17 @@ elif option == 'Entry Strategy':
             end_date=str(end_datetime).split(" ")[0],
             tickers=this_stock,
             thresholds=rsi_thresholds,
-            buy_threshold=thresholds_values[0],
-            sell_threshold=thresholds_values[1],
+            buy_threshold=str(thresholds_values[0]),
+            sell_threshold=str(thresholds_values[1]),
         )
         st.pyplot(entry_plot)
+        st.warning(
+            "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
+        )
 else:
     st.warning("Please select an option and click the submit button!")
 
-
-st.warning(
-    "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
-)
-st.warning(
-    "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
-)
-st.warning(
-    "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
-)
+# Credit
 st.markdown(
     f"""
         <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
