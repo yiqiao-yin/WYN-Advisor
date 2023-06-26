@@ -635,6 +635,7 @@ if option == 'Portfolio Management':
         st.write(f"Min Volatility Allocation in Percentile:")
         st.table(some_data["Min Volatility Allocation in Percentile"])
         st.pyplot(eff_front_figure)
+        st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
         st.warning(
             "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
         )
@@ -680,6 +681,7 @@ elif option == 'Entry Strategy':
             sell_threshold=thresholds_values[1],
         )
         st.pyplot(entry_plot)
+        st.success("Entry Strategy teacheds Mr. Yin what to buy. 💡")
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
         )
