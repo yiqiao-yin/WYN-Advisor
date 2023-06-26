@@ -53,6 +53,8 @@ if option == 'Portfolio Management':
         with st.form(key="my_form"):
             submit_button = st.form_submit_button(label="Submit!")
 elif option == 'Entry Strategy':
+    start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
+    end_datetime = st.sidebar.date_input("End date", datetime.today())
     this_stock = st.sidebar.text_input("Enter a ticker of a stock you like:", "AAPL")
     rsi_thresholds = st.sidebar.text_input(
         "Enter 3 integers for RSI thresholds (sep. by comma and space):", "10, 20, 30"
