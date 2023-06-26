@@ -22,7 +22,7 @@ st.markdown(
 st.sidebar.title("Sidebar")
 option = st.sidebar.selectbox(
     'Which strategy do you want to see?',
-    ('Portfolio Management', 'Entry Strategy'))
+    ("--", 'Portfolio Management', 'Entry Strategy'))
 st.sidebar.write('You selected:', option)
 
 # More sidebar
@@ -63,6 +63,8 @@ elif option == 'Entry Strategy':
     with st.sidebar:
         with st.form(key="my_form"):
             submit_button = st.form_submit_button(label="Submit!")
+else:
+    st.sidebar.write("Please pick an option from above.")
 
 # Credits
 st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
