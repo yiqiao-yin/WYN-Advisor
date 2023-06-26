@@ -31,6 +31,7 @@ if option == 'Portfolio Management':
         "Enter stocks (sep. by comma and space, e.g. ', ')",
         "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX, AVGO, PEP, COST, ADBE, CSCO, CMCSA, TXN, QCOM, HON, INTU, AMGN, AMAT, SBUX, ISRG, MDLZ, GILD, ADI, ADP, VRTX, REGN, PYPL, MU, CSX, MCHP",
     )
+    st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
     start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
     end_datetime = st.sidebar.date_input("End date", datetime.today())
     st.sidebar.write(
@@ -69,7 +70,6 @@ else:
     st.sidebar.write("Please pick an option from above.")
 
 # Credits
-st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
 st.sidebar.markdown(
     "© [Yiqiao Yin](https://www.y-yin.io/) | [LinkedIn](https://www.linkedin.com/in/yiqiaoyin/) | [YouTube](https://youtube.com/YiqiaoYin/)"
 )
