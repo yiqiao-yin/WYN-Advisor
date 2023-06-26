@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
+from ta.momentum import RSIIndicator
 import yfinance as yf
 
 # Set up Title
