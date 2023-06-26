@@ -681,9 +681,12 @@ elif option == 'Entry Strategy':
             sell_threshold=thresholds_values[1],
         )
         st.pyplot(entry_plot)
-        st.success("Entry Strategy teacheds Mr. Yin what to buy. 💡")
+        st.success("Entry Strategy teacheds Mr. Yin when to buy. 💡")
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
+        )
+        st.warning(
+            "Note (2): Mr. Yin currently doesn't execute any exit strategy. Holding a stock is like marriage. Mr. Yin does not believe in short term profits and it certainly does not fulfil fiduciary by his experience. For starters, think about the tax you pay."
         )
 else:
     st.warning("Please select an option and click the submit button!")
