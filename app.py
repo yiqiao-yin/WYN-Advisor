@@ -96,7 +96,7 @@ def download_stocks(tickers: List[str]) -> List[pd.DataFrame]:
         df = yf.download(ticker)
 
         # Add the DataFrame to the list.
-        df_list.append(df.tail(255 * 10))
+        df_list.append(df.tail(255 * 8))
 
     return df_list
 
