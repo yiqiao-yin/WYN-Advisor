@@ -29,10 +29,10 @@ st.sidebar.write('You selected:', option)
 if option == 'Portfolio Management':
     stocks = st.sidebar.text_input(
         "Enter stocks (sep. by comma and space, e.g. ', ')",
-        "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX, AVGO, PEP, COST, ADBE, CSCO, CMCSA, TXN, QCOM, HON, INTU, AMGN, AMAT, SBUX, ISRG, MDLZ, GILD, ADI, ADP, VRTX, REGN, PYPL, MU, CSX, MCHP",
+        "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
     )
     st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
-    start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
+    start_datetime = st.sidebar.date_input("Start date", datetime(2012, 1, 1))
     end_datetime = st.sidebar.date_input("End date", datetime.today())
     st.sidebar.write(
         "Range selected: from ",
