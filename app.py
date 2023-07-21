@@ -608,7 +608,7 @@ if option == "Portfolio Management":
         mean_returns = returns.mean()
         cov_matrix = returns.cov()
         eff_front_figure, some_data = display_simulated_ef_with_random(
-            mean_returns, cov_matrix, num_portfolios, risk_free_rate
+            table, mean_returns, cov_matrix, num_portfolios, risk_free_rate
         )
 
         # Start new section: Efficient Portfolio

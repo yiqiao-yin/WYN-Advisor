@@ -173,6 +173,7 @@ def random_portfolios(
 
 
 def display_simulated_ef_with_random(
+    table: pd.DataFrame,
     mean_returns: List[float],
     cov_matrix: np.ndarray,
     num_portfolios: int,
