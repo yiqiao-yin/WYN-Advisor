@@ -56,7 +56,7 @@ def plot_mkt_cap(df: pd.DataFrame) -> px.treemap:
     return fig
 
 
-def plot_returns() -> plt.Figure:
+def plot_returns(table: pd.DataFrame) -> plt.Figure:
     """
     This function plots the daily returns of each stock contained in the DataFrame `table`.
 

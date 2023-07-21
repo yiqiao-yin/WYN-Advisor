@@ -556,7 +556,7 @@ if option == "Portfolio Management":
             """,
             unsafe_allow_html=True,
         )
-        return_figure = plot_returns()
+        return_figure = plot_returns(table=table)
         st.write(
             f"""
             Plot daily returns of the stocks selected: {stocks}
