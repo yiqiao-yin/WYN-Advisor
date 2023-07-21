@@ -6,8 +6,10 @@ import numpy as np
 import pandas as pd
 import plotly.express as px
 import streamlit as st
-from ta.momentum import RSIIndicator
 import yfinance as yf
+from ta.momentum import RSIIndicator
+
+from advisor import *
 
 # Set up Title
 st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
@@ -20,13 +22,15 @@ st.markdown(
 
 # Set up Sidebar
 st.sidebar.title("Sidebar")
+st.sidebar.write(sum(1,2))
 option = st.sidebar.selectbox(
-    'Which strategy do you want to see?',
-    ("--", 'Portfolio Management', 'Entry Strategy'))
-st.sidebar.write('You selected:', option)
+    "Which strategy do you want to see?",
+    ("--", "Portfolio Management", "Entry Strategy"),
+)
+st.sidebar.write("You selected:", option)
 
 # More sidebar
-if option == 'Portfolio Management':
+if option == "Portfolio Management":
     stocks = st.sidebar.text_input(
         "Enter stocks (sep. by comma and space, e.g. ', ')",
         "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
@@ -53,12 +57,13 @@ if option == 'Portfolio Management':
     with st.sidebar:
         with st.form(key="my_form"):
             submit_button = st.form_submit_button(label="Submit!")
-elif option == 'Entry Strategy':
+elif option == "Entry Strategy":
     start_datetime = st.sidebar.date_input("Start date", datetime(2010, 1, 1))
     end_datetime = st.sidebar.date_input("End date", datetime.today())
     this_stock = st.sidebar.text_input("Enter a ticker of a stock you like:", "AAPL")
     rsi_thresholds = st.sidebar.text_input(
-        "Enter 3 integers for number of past days to construct RSI (sep. by comma and space):", "12, 26, 50"
+        "Enter 3 integers for number of past days to construct RSI (sep. by comma and space):",
+        "12, 26, 50",
     )
     thresholds_values = st.sidebar.slider(
         "Select a range of values to infer margin of error", 0.0, 100.0, (25.0, 75.0)
@@ -446,7 +451,7 @@ def entry_strategy(
 
 
 # Content starts here
-if option == 'Portfolio Management':
+if option == "Portfolio Management":
     if submit_button:
         # List `stocks` is a string of comma-separated stock symbols
         stocks = stocks.split(", ")
@@ -647,7 +652,7 @@ if option == 'Portfolio Management':
         )
     else:
         st.warning("Please select an option and click the submit button!")
-elif option == 'Entry Strategy':
+elif option == "Entry Strategy":
     if submit_button:
         st.markdown(
             r"""
