@@ -22,7 +22,6 @@ st.markdown(
 
 # Set up Sidebar
 st.sidebar.title("Sidebar")
-st.sidebar.write(sum(1,2))
 option = st.sidebar.selectbox(
     "Which strategy do you want to see?",
     ("--", "Portfolio Management", "Entry Strategy"),
