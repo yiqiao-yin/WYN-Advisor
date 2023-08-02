@@ -360,8 +360,16 @@ elif option == "Entry Strategy":
             """
             user_prompt = {"role": "user", "content": prompt}
             result.append(user_prompt)
-            response = call_chatcompletion(result)
-            st.markdown(response)
+            try:
+                response = call_chatcompletion(result)
+                st.markdown(response)
+            except:
+                st.warning("OpenAI limit reached. We'll manually pull summarized information for you.")
+                df = []
+                for key, value in the_stock_info.items():
+                    df.append([key,value])
+                df = pd.DataFrame(df)
+                st.table(df)
             st.success(
                 "We used Yahoo Finance to acquire data and OpenAI's ChatGPT to create this file!"
             )
