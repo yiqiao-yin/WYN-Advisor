@@ -429,3 +429,24 @@ def entry_strategy_plotly(
     fig.update_yaxes(title_text='<b>RSI</b>', secondary_y=True)
 
     return fig
+
+
+def get_stock_info(ticker: str) -> dict:
+    # Get More Data:
+    tck = yf.Ticker(ticker)
+    ALL_DATA = {
+        'get stock info': tck.info,
+        'get historical market data': tck.history(period="max"),
+        'show actions (dividends, splits)': tck.actions,
+        'show dividends': tck.dividends,
+        'show splits': tck.splits,
+        'show financials': [tck.financials, tck.quarterly_financials],
+        'show balance sheet': [tck.balance_sheet, tck.quarterly_balance_sheet],
+        'show cashflow': [tck.cashflow, tck.quarterly_cashflow],
+        'show earnings': [tck.earnings, tck.quarterly_earnings],
+        'show sustainability': tck.sustainability,
+        'show analysts recommendations': tck.recommendations,
+        'show next event (earnings, etc)': tck.calendar
+    }
+
+    return ALL_DATA

@@ -10,7 +10,7 @@ import yfinance as yf
 from ta.momentum import RSIIndicator
 
 from advisor import *
-from advisor import entry_strategy_plotly
+from advisor import entry_strategy_plotly, get_stock_info
 
 # Set up Title
 st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
@@ -284,7 +284,10 @@ if option == "Portfolio Management":
         st.warning("Please select an option and click the submit button!")
 elif option == "Entry Strategy":
     if submit_button:
-        tab1, tab2 = st.tabs(["Overview", "Buy/Sell Signal (Interactive)"])
+        tab1, tab2, tab3 = st.tabs([
+            "Overview",
+            "Buy/Sell Signal (Interactive)",
+            "Basic Stock Info"])
 
         with tab1:
             st.markdown(
@@ -333,6 +336,10 @@ elif option == "Entry Strategy":
                 sell_threshold=thresholds_values[1],
             )
             st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
+        with tab3:
+            all_info = get_stock_info(this_stock)
+            st.markdown(all_info['get stock info'])
 
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
