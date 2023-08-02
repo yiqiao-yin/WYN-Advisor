@@ -283,44 +283,60 @@ if option == "Portfolio Management":
         st.warning("Please select an option and click the submit button!")
 elif option == "Entry Strategy":
     if submit_button:
-        st.markdown(
-            r"""
-            The Relative Strength Index ([RSI](https://www.investopedia.com/terms/r/rsi.asp)) 
-            is a momentum oscillator that determines the pace and variation of security prices.
-            It is usually depicted graphically and oscillates on a scale of zero to 100.
+        tab1, tab2 = st.tabs(["Overview", "Buy/Sell Signal (Interactive)"])
 
-            The RSI oscillates on a scale of zero to 100. Low RSI levels, below 30, generate 
-            buy signals and indicate an oversold or undervalued condition. High RSI levels, 
-            above 70, generate sell signals and suggest that a security is overbought or 
-            overvalued. A reading of 50 denotes a neutral level or balance between bullish 
-            and bearish positions.
+        with tab1:
+            st.markdown(
+                r"""
+                The Relative Strength Index ([RSI](https://www.investopedia.com/terms/r/rsi.asp)) 
+                is a momentum oscillator that determines the pace and variation of security prices.
+                It is usually depicted graphically and oscillates on a scale of zero to 100.
 
-            We allow users to select the number of days for RSI (this is one of the input 
-            text area on the left sidebar). We also allow users to select the range to 
-            measure margin of error, e.g. default values are (20, 80).
-            """
-        )
-        # Start new section: Entry Strategy
-        st.markdown(
-            f"""
-                <h4 style='text-align: center;'>Entry Strategy:</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.write(f"Pick a stock you like and review entry strategy.")
-        entry_plot = entry_strategy(
-            start_date=str(start_datetime).split(" ")[0],
-            end_date=str(end_datetime).split(" ")[0],
-            tickers=this_stock,
-            thresholds=rsi_thresholds,
-            buy_threshold=thresholds_values[0],
-            sell_threshold=thresholds_values[1],
-        )
-        st.pyplot(entry_plot)
-        st.success("Entry Strategy teacheds Mr. Yin when to buy. 💡")
+                The RSI oscillates on a scale of zero to 100. Low RSI levels, below 30, generate 
+                buy signals and indicate an oversold or undervalued condition. High RSI levels, 
+                above 70, generate sell signals and suggest that a security is overbought or 
+                overvalued. A reading of 50 denotes a neutral level or balance between bullish 
+                and bearish positions.
+
+                We allow users to select the number of days for RSI (this is one of the input 
+                text area on the left sidebar). We also allow users to select the range to 
+                measure margin of error, e.g. default values are (20, 80).
+                """
+            )
+            # Start new section: Entry Strategy
+            st.markdown(
+                f"""
+                    <h4 style='text-align: center;'>Entry Strategy:</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.write(f"Pick a stock you like and review entry strategy.")
+            entry_plot = entry_strategy(
+                start_date=str(start_datetime).split(" ")[0],
+                end_date=str(end_datetime).split(" ")[0],
+                tickers=this_stock,
+                thresholds=rsi_thresholds,
+                buy_threshold=thresholds_values[0],
+                sell_threshold=thresholds_values[1],
+            )
+            st.pyplot(entry_plot)
+            st.success("Entry Strategy teacheds Mr. Yin when to buy. 💡")
+
+        with tab2:
+            fig = entry_strategy_plotly(
+                start_date=str(start_datetime).split(" ")[0],
+                end_date=str(end_datetime).split(" ")[0],
+                tickers=this_stock,
+                thresholds=rsi_thresholds,
+                buy_threshold=thresholds_values[0],
+                sell_threshold=thresholds_values[1],
+            )
+            st.plotly_chart(fig, theme="streamlit", use_container_width=True)
+
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
         )
+
         st.warning(
             "Note (2): Mr. Yin currently doesn't execute any exit strategy. Holding a stock is like marriage. Mr. Yin does not believe in short term profits and it certainly does not fulfil fiduciary by his experience. For starters, think about the tax you pay."
         )

@@ -5,6 +5,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
+from plotly.subplots import make_subplots
 import streamlit as st
 import yfinance as yf
 from ta.momentum import RSIIndicator
@@ -371,5 +373,59 @@ def entry_strategy(
     axs[1].plot(stock["RSI1"], label="RSI", color="green")
     axs[1].plot(stock["RSI2"], label="RSI", color="blue")
     axs[1].plot(stock["RSI3"], label="RSI", color="red")
+
+    return fig
+
+
+def entry_strategy_plotly(
+    start_date="2013-01-01",
+    end_date="2019-12-6",
+    tickers="AAPL",
+    thresholds="10, 20, 30",
+    buy_threshold=20,
+    sell_threshold=80,
+):
+    rsi_threshold_1 = int(thresholds.split(",")[0])
+    rsi_threshold_2 = int(thresholds.split(",")[1])
+    rsi_threshold_3 = int(thresholds.split(",")[2])
+
+    # Conditional Buy/Sell => Signals
+    stock = yf.download(tickers, start_date, end_date)
+    rsiData1 = RSIIndicator(stock["Close"], rsi_threshold_1, True)
+    rsiData2 = RSIIndicator(stock["Close"], rsi_threshold_2, True)
+    rsiData3 = RSIIndicator(stock["Close"], rsi_threshold_3, True)
+
+    # Conditional Buy/Sell => Signals
+    stock["RSI1_Buy"] = np.where(rsiData1.rsi() < buy_threshold, stock["Close"], np.nan)
+    stock["RSI1_Sell"] = np.where(rsiData1.rsi() > sell_threshold, stock["Close"], np.nan)
+    stock["RSI2_Buy"] = np.where(rsiData2.rsi() < buy_threshold, stock["Close"], np.nan)
+    stock["RSI2_Sell"] = np.where(rsiData2.rsi() > sell_threshold, stock["Close"], np.nan)
+    stock["RSI3_Buy"] = np.where(rsiData3.rsi() < buy_threshold, stock["Close"], np.nan)
+    stock["RSI3_Sell"] = np.where(rsiData3.rsi() > sell_threshold, stock["Close"], np.nan)
+
+    # Create a subplot figure with secondary Y-axis
+    fig = make_subplots(specs=[[{"secondary_y": True}]])
+
+    # Add traces for close prices
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["Close"], name="Close Price", line=dict(color='blue', width=0.5)), secondary_y=False)
+
+    # Add traces for buy and sell signals
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI1_Buy"], mode='markers', name='Buy Signal (light)', marker=dict(color='green', size=6, symbol='triangle-up')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI1_Sell"], mode='markers', name='Sell Signal (light)', marker=dict(color='red', size=6, symbol='triangle-down')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI2_Buy"], mode='markers', name='Buy Signal (medium)', marker=dict(color='blue', size=6, symbol='triangle-up')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI2_Sell"], mode='markers', name='Sell Signal (medium)', marker=dict(color='purple', size=6, symbol='triangle-down')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI3_Buy"], mode='markers', name='Buy Signal (heavy)', marker=dict(color='cyan', size=6, symbol='triangle-up')), secondary_y=False)
+    fig.add_trace(go.Scatter(x=stock.index, y=stock["RSI3_Sell"], mode='markers', name='Sell Signal (heavy)', marker=dict(color='pink', size=6, symbol='triangle-down')), secondary_y=False)
+
+    # Add traces for RSI
+    # fig.add_trace(go.Scatter(x=stock.index, y=rsiData1.rsi(), name="RSI 1", line=dict(color='green')), secondary_y=True)
+    # fig.add_trace(go.Scatter(x=stock.index, y=rsiData2.rsi(), name="RSI 2", line=dict(color='blue')), secondary_y=True)
+    # fig.add_trace(go.Scatter(x=stock.index, y=rsiData3.rsi(), name="RSI 3", line=dict(color='red')), secondary_y=True)
+
+    # Set figure title, and axis titles
+    fig.update_layout(title_text='Close Price Buy/Sell Signals using WYN Entry Strategy')
+    fig.update_xaxes(title_text='Date')
+    fig.update_yaxes(title_text='<b>Close Price</b>', secondary_y=False)
+    fig.update_yaxes(title_text='<b>RSI</b>', secondary_y=True)
 
     return fig
