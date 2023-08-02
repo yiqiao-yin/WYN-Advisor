@@ -296,6 +296,9 @@ elif option == "Entry Strategy":
             "Question-Answer"
         ])
 
+        # Get data
+        all_info = get_stock_info(this_stock)
+
         with tab1:
             st.markdown(
                 r"""
@@ -345,7 +348,7 @@ elif option == "Entry Strategy":
             st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
         with tab3:
-            all_info = get_stock_info(this_stock)
+            st.warning("Please be patient with us. Our generative AI robot is preparing the info for you!")
             the_stock_info = all_info['get stock info']
             assistant_prompt = {
                 "role": "assistant",
@@ -363,7 +366,6 @@ elif option == "Entry Strategy":
             st.success("We used Yahoo Finance to acquire data and OpenAI's ChatGPT to create this file!")
         
         with tab4:
-            all_info = get_stock_info(this_stock)
             the_stock_info = all_info['get stock info']
             assistant_prompt = {
                 "role": "assistant",
