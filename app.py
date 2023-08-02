@@ -3,9 +3,9 @@ from typing import List, Tuple
 
 import matplotlib.pyplot as plt
 import numpy as np
+import openai
 import pandas as pd
 import plotly.express as px
-import openai
 import streamlit as st
 import yfinance as yf
 from ta.momentum import RSIIndicator
@@ -289,12 +289,9 @@ if option == "Portfolio Management":
         st.warning("Please select an option and click the submit button!")
 elif option == "Entry Strategy":
     if submit_button:
-        tab1, tab2, tab3, tab4 = st.tabs([
-            "Overview",
-            "Buy/Sell Signal (Interactive)",
-            "Basic Stock Info",
-            "Question-Answer"
-        ])
+        tab1, tab2, tab3 = st.tabs(
+            ["Overview", "Buy/Sell Signal (Interactive)", "Basic Stock Info"]
+        )
 
         # Get data
         all_info = get_stock_info(this_stock)
@@ -348,8 +345,10 @@ elif option == "Entry Strategy":
             st.plotly_chart(fig, theme="streamlit", use_container_width=True)
 
         with tab3:
-            st.warning("Please be patient with us. Our generative AI robot is preparing the info for you!")
-            the_stock_info = all_info['get stock info']
+            st.warning(
+                "Please be patient with us. Our generative AI robot is preparing the info for you!"
+            )
+            the_stock_info = all_info["get stock info"]
             assistant_prompt = {
                 "role": "assistant",
                 "content": "You are a helpful AI assistant for the user.",
@@ -363,27 +362,9 @@ elif option == "Entry Strategy":
             result.append(user_prompt)
             response = call_chatcompletion(result)
             st.markdown(response)
-            st.success("We used Yahoo Finance to acquire data and OpenAI's ChatGPT to create this file!")
-        
-        with tab4:
-            the_stock_info = all_info['get stock info']
-            assistant_prompt = {
-                "role": "assistant",
-                "content": "You are a helpful AI assistant for the user.",
-            }
-            result = []
-            result.append(assistant_prompt)
-            user_question = st.text_input("Enter question here:", "What is the name of the company?")
-            prompt = f"""
-                Based on {the_stock_info},
-                {user_question}
-
-            """
-            user_prompt = {"role": "user", "content": prompt}
-            result.append(user_prompt)
-            response = call_chatcompletion(result)
-            st.markdown(response)
-            st.success("We used Yahoo Finance to acquire data and OpenAI's ChatGPT to create this file!")
+            st.success(
+                "We used Yahoo Finance to acquire data and OpenAI's ChatGPT to create this file!"
+            )
 
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
