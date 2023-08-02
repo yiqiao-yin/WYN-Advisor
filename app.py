@@ -5,12 +5,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import openai
 import streamlit as st
 import yfinance as yf
 from ta.momentum import RSIIndicator
 
 from advisor import *
 from advisor import entry_strategy_plotly, get_stock_info
+from my_openai import call_chatcompletion
+
+# Set the OpenAI API key from Streamlit secrets
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set up Title
 st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
@@ -339,7 +344,20 @@ elif option == "Entry Strategy":
 
         with tab3:
             all_info = get_stock_info(this_stock)
-            st.markdown(all_info['get stock info'])
+            the_stock_info = all_info['get stock info']
+            assistant_prompt = {
+                "role": "assistant",
+                "content": "You are a helpful AI assistant for the user.",
+            }
+            result = []
+            result.append(assistant_prompt)
+            prompt = f"""
+                Write a mardown file based on {the_stock_info}
+            """
+            user_prompt = {"role": "user", "content": prompt}
+            result.append(user_prompt)
+            response = call_chatcompletion(result)
+            st.markdown(response)
 
         st.warning(
             "Note (1): The entry strategy presented above simulates largely what Mr. Yin is executing, but the number of days and thresholds are not reproducible and these parameters are largely based on experience."
