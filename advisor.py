@@ -443,10 +443,10 @@ def get_stock_info(ticker: str) -> dict:
         'show financials': [tck.financials, tck.quarterly_financials],
         'show balance sheet': [tck.balance_sheet, tck.quarterly_balance_sheet],
         'show cashflow': [tck.cashflow, tck.quarterly_cashflow],
-        'show earnings': [tck.earnings, tck.quarterly_earnings],
-        'show sustainability': tck.sustainability,
-        'show analysts recommendations': tck.recommendations,
-        'show next event (earnings, etc)': tck.calendar
+        # 'show earnings': [tck.earnings, tck.quarterly_earnings],
+        # 'show sustainability': tck.sustainability,
+        # 'show analysts recommendations': tck.recommendations,
+        # 'show next event (earnings, etc)': tck.calendar
     }
 
     return ALL_DATA
