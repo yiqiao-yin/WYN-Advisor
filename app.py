@@ -10,6 +10,7 @@ import yfinance as yf
 from ta.momentum import RSIIndicator
 
 from advisor import *
+from advisor import entry_strategy_plotly
 
 # Set up Title
 st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
