@@ -18,7 +18,8 @@ from my_openai import call_chatcompletion
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set up Title
-st.set_page_config(page_title="WYN AI", page_icon=":robot_face:")
+st.set_page_config(page_title="WYN AI", page_icon=":robot_face:", layout="wide")
+
 st.markdown(
     f"""
         <h1 style='text-align: center;'>W.Y.N. Artificial Intelligence 🤖</h1>
@@ -88,203 +89,209 @@ st.sidebar.markdown(
 # Content starts here
 if option == "Portfolio Management":
     if submit_button:
+        col1, col2, col3 = st.columns(2)
+
         # List `stocks` is a string of comma-separated stock symbols
         stocks = stocks.split(", ")
 
-        # Get the list of stocks data using the `download_stocks` function
-        list_of_stocks = download_stocks(stocks)
-        st.success("Downloading latest stock data successfully!")
-
-        # Create a DataFrame object from the closing prices of all stocks
-        table = pd.DataFrame(
-            [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
-        ).transpose()
-
-        # Set the column names to be the stocks symbols
-        table.columns = stocks
-
-        # Filter by date range selected by user
-        df = table
-        new_index = [df.index[t].date() for t in range(len(df.index))]
-        check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
-        check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
-        final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
-        filtered_df = df[final_idx]
-        if filtered_df.shape[0] > 100:
-            st.success("Data filtered by date range selected by user.")
-            table = filtered_df
-        else:
-            st.warning(
-                "Date range by user not valid, default range (past 2 years) is used."
+        with col1:
+            # Get the list of stocks data using the `download_stocks` function
+            list_of_stocks = download_stocks(stocks)
+            st.success("Downloading latest stock data successfully!")
+    
+            # Create a DataFrame object from the closing prices of all stocks
+            table = pd.DataFrame(
+                [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
+            ).transpose()
+    
+            # Set the column names to be the stocks symbols
+            table.columns = stocks
+    
+            # Filter by date range selected by user
+            df = table
+            new_index = [df.index[t].date() for t in range(len(df.index))]
+            check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
+            check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
+            final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
+            filtered_df = df[final_idx]
+            if filtered_df.shape[0] > 100:
+                st.success("Data filtered by date range selected by user.")
+                table = filtered_df
+            else:
+                st.warning(
+                    "Date range by user not valid, default range (past 2 years) is used."
+                )
+                table = table.tail(255 * 2)
+    
+            # Get info
+            tickers = []
+            deltas = []
+            sectors = []
+            market_caps = []
+            for ticker in stocks:
+                try:
+                    ## create Ticker object
+                    stock = yf.Ticker(ticker)
+                    tickers.append(ticker)
+    
+                    ## download info
+                    info = stock.info
+    
+                    ## download sector
+                    sectors.append(info["sector"])
+    
+                    ## download daily stock prices for 2 days
+                    hist = stock.history("2d")
+    
+                    ## calculate change in stock price (from a trading day ago)
+                    deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
+    
+                    ## calculate market cap
+                    market_caps.append(info["sharesOutstanding"] * info["previousClose"])
+    
+                    ## add print statement to ensure code is running
+                    print(f"downloaded {ticker}")
+                except Exception as e:
+                    print(e)
+    
+            # Create dataframe for market cap
+            df_for_mkt_cap = pd.DataFrame(
+                {
+                    "ticker": tickers,
+                    "sector": sectors,
+                    "delta": deltas,
+                    "market_cap": market_caps,
+                }
             )
-            table = table.tail(255 * 2)
-
-        # Get info
-        tickers = []
-        deltas = []
-        sectors = []
-        market_caps = []
-        for ticker in stocks:
-            try:
-                ## create Ticker object
-                stock = yf.Ticker(ticker)
-                tickers.append(ticker)
-
-                ## download info
-                info = stock.info
-
-                ## download sector
-                sectors.append(info["sector"])
-
-                ## download daily stock prices for 2 days
-                hist = stock.history("2d")
-
-                ## calculate change in stock price (from a trading day ago)
-                deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
-
-                ## calculate market cap
-                market_caps.append(info["sharesOutstanding"] * info["previousClose"])
-
-                ## add print statement to ensure code is running
-                print(f"downloaded {ticker}")
-            except Exception as e:
-                print(e)
-
-        # Create dataframe for market cap
-        df_for_mkt_cap = pd.DataFrame(
-            {
-                "ticker": tickers,
-                "sector": sectors,
-                "delta": deltas,
-                "market_cap": market_caps,
-            }
-        )
-        color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
-        df_for_mkt_cap["colors"] = pd.cut(
-            df_for_mkt_cap["delta"],
-            bins=color_bin,
-            labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
-        )
-
-        # Start new section: Market Cap
-        st.markdown(
-            f"""
-                <h4 style='text-align: left;'>Market Cap Heatmap</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            r"""
-            I trade large cap stocks first, so I visualize data using market cap heatmap.
-            The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
-            model and the market cap is captured using the 2nd factor 'SMB'.
+            color_bin = [-1, -0.02, -0.01, 0, 0.01, 0.02, 1]
+            df_for_mkt_cap["colors"] = pd.cut(
+                df_for_mkt_cap["delta"],
+                bins=color_bin,
+                labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
+            )
+    
+            # Start new section: Market Cap
+            st.markdown(
+                f"""
+                    <h4 style='text-align: left;'>Market Cap Heatmap</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                r"""
+                I trade large cap stocks first, so I visualize data using market cap heatmap.
+                The philosophy comes from the famous [Fama-French 3 Factor](https://en.wikipedia.org/wiki/Fama%E2%80%93French_three-factor_model)
+                model and the market cap is captured using the 2nd factor 'SMB'.
+                """
+            )
+    
+            # Plot heatmap
+            fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
+            st.plotly_chart(fig_market_cap_heatmap)
+    
+            # Start new section: Time-series Plot
+            st.markdown(
+                f"""
+                    <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            return_figure = plot_returns(table=table)
+            st.write(
+                f"""
+                Plot daily returns of the stocks selected: {stocks}
             """
-        )
+            )
+            st.pyplot(return_figure)
 
-        # Plot heatmap
-        fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
-        st.plotly_chart(fig_market_cap_heatmap)
-
-        # Start new section: Time-series Plot
-        st.markdown(
-            f"""
-                <h4 style='text-align: left;'>Time Series Plot of Daily Returns</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        return_figure = plot_returns(table=table)
-        st.write(
-            f"""
-            Plot daily returns of the stocks selected: {stocks}
-        """
-        )
-        st.pyplot(return_figure)
-
-        # Start new section: MPT
-        st.markdown(
-            f"""
-                <h4 style='text-align: center;'>Modern Portfolio Theory</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.markdown(
-            r"""
-            Among the large cap stocks, I trade a long run reversal strategy, and hence the visualization of returns from time-series plot and MPT.
-            The philosophy comes from the famous [Carhart 4-Factor](https://en.wikipedia.org/wiki/Carhart_four-factor_model)
-            model and the reversal strategy is captured using the 4th factor 'UMD'. If interested, one can 
-            trace the algorithm proposed from this [paper](https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.1997.tb03808.x).
+        with col2:
+            # Start new section: MPT
+            st.markdown(
+                f"""
+                    <h4 style='text-align: center;'>Modern Portfolio Theory</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.markdown(
+                r"""
+                Among the large cap stocks, I trade a long run reversal strategy, and hence the visualization of returns from time-series plot and MPT.
+                The philosophy comes from the famous [Carhart 4-Factor](https://en.wikipedia.org/wiki/Carhart_four-factor_model)
+                model and the reversal strategy is captured using the 4th factor 'UMD'. If interested, one can 
+                trace the algorithm proposed from this [paper](https://onlinelibrary.wiley.com/doi/10.1111/j.1540-6261.1997.tb03808.x).
+                """
+            )
+            st.warning("What is Efficient Frontier?")
+            st.markdown(
+                r"""
+                The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
+    
+                Mathematically, the efficient frontier is the solution to the following optimization problem:
+    
+                Minimize:
+                $$ \sigma_p = \sqrt{w^T\Sigma w} $$
+                Subject to:
+                $$ R_p = w^T \mu $$
+    
+                Where:
+    
+                - $w$ is a vector of portfolio weights.
+                - $\Sigma$ is the covariance matrix of asset returns.
+                - $\mu$ is the vector of expected asset returns.
+                - $\sigma_p$ is the portfolio standard deviation (risk).
+                - $R_p$ is the portfolio expected return.
+                Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
+    
+                Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
             """
-        )
-        st.warning("What is Efficient Frontier?")
-        st.markdown(
-            r"""
-            The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
+            )
+    
+            returns = table.pct_change()
+            mean_returns = returns.mean()
+            cov_matrix = returns.cov()
+            eff_front_figure, some_data = display_simulated_ef_with_random(
+                table, mean_returns, cov_matrix, num_portfolios, risk_free_rate
+            )
+    
+            # Start new section: Efficient Portfolio
+            st.markdown(
+                f"""
+                    <h4 style='text-align: center;'>Efficient Portfolio:</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.write(f"Annualised Return (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}")
+            st.write(f"Annualised Volatility (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}")
+            # st.write(f"Max Sharpe Allocation:")
+            # st.table(some_data["Max Sharpe Allocation"])
+            st.write(f"Max Sharpe Allocation in Percentile:")
+            st.table(some_data["Max Sharpe Allocation in Percentile"])
+    
+            # Start new section: Min Variance Portfolio
+            st.markdown(
+                f"""
+                    <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
+                """,
+                unsafe_allow_html=True,
+            )
+            st.write(f"Annualised Return (min variance portfolio): {some_data['Annualised Return (min variance portfolio)']}")
+            st.write(f"Annualised Volatility (min variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}")
+            # st.write(f"Min Volatility Allocation:")
+            # st.table(some_data["Min Volatility Allocation"])
+            st.write(f"Min Volatility Allocation in Percentile:")
+            st.table(some_data["Min Volatility Allocation in Percentile"])
+            st.pyplot(eff_front_figure)
 
-            Mathematically, the efficient frontier is the solution to the following optimization problem:
-
-            Minimize:
-            $$ \sigma_p = \sqrt{w^T\Sigma w} $$
-            Subject to:
-            $$ R_p = w^T \mu $$
-
-            Where:
-
-            - $w$ is a vector of portfolio weights.
-            - $\Sigma$ is the covariance matrix of asset returns.
-            - $\mu$ is the vector of expected asset returns.
-            - $\sigma_p$ is the portfolio standard deviation (risk).
-            - $R_p$ is the portfolio expected return.
-            Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
-
-            Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
-        """
-        )
-
-        returns = table.pct_change()
-        mean_returns = returns.mean()
-        cov_matrix = returns.cov()
-        eff_front_figure, some_data = display_simulated_ef_with_random(
-            table, mean_returns, cov_matrix, num_portfolios, risk_free_rate
-        )
-
-        # Start new section: Efficient Portfolio
-        st.markdown(
-            f"""
-                <h4 style='text-align: center;'>Efficient Portfolio:</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.write(f"Annualised Return (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}")
-        st.write(f"Annualised Volatility (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}")
-        # st.write(f"Max Sharpe Allocation:")
-        # st.table(some_data["Max Sharpe Allocation"])
-        st.write(f"Max Sharpe Allocation in Percentile:")
-        st.table(some_data["Max Sharpe Allocation in Percentile"])
-
-        # Start new section: Min Variance Portfolio
-        st.markdown(
-            f"""
-                <h4 style='text-align: center;'>Min Variance Portfolio:</h4>
-            """,
-            unsafe_allow_html=True,
-        )
-        st.write(f"Annualised Return (min variance portfolio): {some_data['Annualised Return (min variance portfolio)']}")
-        st.write(f"Annualised Volatility (min variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}")
-        # st.write(f"Min Volatility Allocation:")
-        # st.table(some_data["Min Volatility Allocation"])
-        st.write(f"Min Volatility Allocation in Percentile:")
-        st.table(some_data["Min Volatility Allocation in Percentile"])
-        st.pyplot(eff_front_figure)
-        st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
-        st.warning(
-            "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
-        )
-        st.warning(
-            "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
-        )
-        st.warning(
-            "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
-        )
+        with col3:
+            st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
+            st.warning(
+                "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
+            )
+            st.warning(
+                "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
+            )
+            st.warning(
+                "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
+            )
     else:
         st.warning("Please select an option and click the submit button!")
 elif option == "Entry Strategy":
