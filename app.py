@@ -89,7 +89,7 @@ st.sidebar.markdown(
 # Content starts here
 if option == "Portfolio Management":
     if submit_button:
-        col1, col2, col3 = st.columns(3)
+        col1, col2 = st.columns(2)
 
         # List `stocks` is a string of comma-separated stock symbols
         stocks = stocks.split(", ")
@@ -204,6 +204,17 @@ if option == "Portfolio Management":
             )
             st.pyplot(return_figure)
 
+            st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
+            st.warning(
+                "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
+            )
+            st.warning(
+                "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
+            )
+            st.warning(
+                "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
+            )
+
         with col2:
             # Start new section: MPT
             st.markdown(
@@ -221,29 +232,30 @@ if option == "Portfolio Management":
                 """
             )
             st.warning("What is Efficient Frontier?")
-            st.markdown(
-                r"""
-                The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
-    
-                Mathematically, the efficient frontier is the solution to the following optimization problem:
-    
-                Minimize:
-                $$ \sigma_p = \sqrt{w^T\Sigma w} $$
-                Subject to:
-                $$ R_p = w^T \mu $$
-    
-                Where:
-    
-                - $w$ is a vector of portfolio weights.
-                - $\Sigma$ is the covariance matrix of asset returns.
-                - $\mu$ is the vector of expected asset returns.
-                - $\sigma_p$ is the portfolio standard deviation (risk).
-                - $R_p$ is the portfolio expected return.
-                Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
-    
-                Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
-            """
-            )
+            with st.expander("Expand/collapse for references:"):
+                st.markdown(
+                    r"""
+                    The efficient frontier is a concept in Modern Portfolio Theory. It is the set of optimal portfolios that offer the highest expected return for a defined level of risk or the lowest risk for a given level of expected return.
+        
+                    Mathematically, the efficient frontier is the solution to the following optimization problem:
+        
+                    Minimize:
+                    $$ \sigma_p = \sqrt{w^T\Sigma w} $$
+                    Subject to:
+                    $$ R_p = w^T \mu $$
+        
+                    Where:
+        
+                    - $w$ is a vector of portfolio weights.
+                    - $\Sigma$ is the covariance matrix of asset returns.
+                    - $\mu$ is the vector of expected asset returns.
+                    - $\sigma_p$ is the portfolio standard deviation (risk).
+                    - $R_p$ is the portfolio expected return.
+                    Here, $w^T$ denotes the transpose of $w$. The symbol $\sqrt{w^T\Sigma w}$ represents the standard deviation (volatility) of the portfolio returns, which is a measure of risk. The equation $R_p = w^T \mu$ states that the expected return of the portfolio should be equal to the portfolio weights times the expected returns of the individual assets.
+        
+                    Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
+                """
+                )
     
             returns = table.pct_change()
             mean_returns = returns.mean()
@@ -281,17 +293,6 @@ if option == "Portfolio Management":
             st.table(some_data["Min Volatility Allocation in Percentile"])
             st.pyplot(eff_front_figure)
 
-        with col3:
-            st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
-            st.warning(
-                "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
-            )
-            st.warning(
-                "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
-            )
-            st.warning(
-                "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
-            )
     else:
         st.warning("Please select an option and click the submit button!")
 elif option == "Entry Strategy":
