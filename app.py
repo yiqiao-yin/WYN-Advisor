@@ -214,13 +214,16 @@ if option == "Portfolio Management":
 
             st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
             st.warning(
-                "Note (1): The time of entry is a trade secret and decided by Mr. Yin based on experience."
+                "Bias (1): The time of entry is a trade secret and is completely decided by me based on personal experience. So far, I have not been able to replicate the timing strategy."
             )
             st.warning(
-                "Note (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation."
+                "Bias (2): Though stocks are presented above, the weights decided by Mr. Yin is drastically different from the above allocation. The reason is I tend to hold the stocks that have gone up a lot and I don't like selling high growth positions for tax purposes."
             )
             st.warning(
-                "Note (3): The initial stock pool construction is also unreproducible. Mr. Yin mostly pick stocks from large cap brackets but occasionally break his own rules."
+                "Bias (3): The initial stock pool construction is also not reproducible. I mostly pick stocks from large cap brackets but occasionally break his own rules. Empirically speaking, I tend to construct my portfolio using 90-10 rule for equity and cash holdings. In the 90 percent, I have a 80-20 rule with 80 percent in large cap and 20 percent in small cap."
+            )
+            st.warning(
+                "Bias (4): Typically asset pricing models tend to balance portfolios on a fixed time window, e.g. once a month etc.. I do not strictly follow this rule. My entry points are random because stock price is stochastic and bottoms usually appear stochasticly."
             )
 
         with col2:
