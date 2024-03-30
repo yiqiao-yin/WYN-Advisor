@@ -97,7 +97,7 @@ if option == "Portfolio Management":
         with col1:
             # Get the list of stocks data using the `download_stocks` function
             list_of_stocks = download_stocks(stocks)
-            st.success("Downloading latest stock data successfully!")
+            st.sidebar.success("Downloading latest stock data successfully!")
 
             # Create a DataFrame object from the closing prices of all stocks
             table = pd.DataFrame(
@@ -119,7 +119,7 @@ if option == "Portfolio Management":
             final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
             filtered_df = df[final_idx]
             if filtered_df.shape[0] > 100:
-                st.success("Data filtered by date range selected by user.")
+                st.sidebar.success("Data filtered by date range selected by user.")
                 table = filtered_df
             else:
                 st.warning(
