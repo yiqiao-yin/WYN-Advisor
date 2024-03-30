@@ -395,9 +395,17 @@ else:
     st.warning("Please select an option and click the submit button!")
 
 # Credit
+from datetime import datetime
+
+def current_year():
+    now = datetime.now()
+    return now.year
+
+# Example usage:
+current_year = current_year()  # This will print the current year
 st.markdown(
     f"""
-        <h6 style='text-align: left;'>Copyright © 2010-2023 Present Yiqiao Yin</h6>
+        <h6 style='text-align: left;'>Copyright © 2010-{current_year} Present Yiqiao Yin</h6>
     """,
     unsafe_allow_html=True,
 )
