@@ -187,7 +187,7 @@ if option == "Portfolio Management":
     
             # Plot heatmap
             fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
-            st.plotly_chart(fig_market_cap_heatmap)
+            st.plotly_chart(fig_market_cap_heatmap, use_container_width=True)
     
             # Start new section: Time-series Plot
             st.markdown(
@@ -202,7 +202,7 @@ if option == "Portfolio Management":
                 Plot daily returns of the stocks selected: {stocks}
             """
             )
-            st.pyplot(return_figure, use_container_width=True, width="80%")
+            st.pyplot(return_figure, use_container_width=True)
 
             st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
             st.warning(
