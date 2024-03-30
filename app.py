@@ -18,7 +18,7 @@ from my_openai import call_chatcompletion
 openai.api_key = st.secrets["OPENAI_API_KEY"]
 
 # Set up Title
-st.set_page_config(page_title="WYN AI", page_icon=":robot_face:", layout="wide")
+st.set_page_config(page_title="WYN AI", page_icon="💹", layout="wide")
 
 st.markdown(
     f"""
