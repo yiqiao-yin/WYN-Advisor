@@ -307,7 +307,7 @@ if option == "Portfolio Management":
                 3,
             )
             st.write(
-                f"Annualised <span style='color:orange'>confidence Interval</span> (efficient portfolio): [{lower_bound_eff_port}, {upper_bound_eff_port}]",
+                f"Annualised <span style='color:orange'>return confidence Interval</span> (efficient portfolio): [{lower_bound_eff_port}, {upper_bound_eff_port}]",
                 unsafe_allow_html=True,
             )
             # st.write(f"Max Sharpe Allocation:")
@@ -350,7 +350,7 @@ if option == "Portfolio Management":
                 3,
             )
             st.write(
-                f"Annualised <span style='color:orange'>confidence Interval</span> (min variance portfolio): [{lower_bound_mv_port}, {upper_bound_mv_port}]",
+                f"Annualised <span style='color:orange'>return confidence Interval</span> (min variance portfolio): [{lower_bound_mv_port}, {upper_bound_mv_port}]",
                 unsafe_allow_html=True,
             )
             # st.write(f"Min Volatility Allocation:")
