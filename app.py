@@ -271,9 +271,9 @@ if option == "Portfolio Management":
                 """,
                 unsafe_allow_html=True,
             )
-            st.write(f"Annualised Return <span style='color:green'>(efficient portfolio)</span>: {some_data['Annualised Return (efficient portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised Volatility <span style='color:red'>(efficient portfolio)</span>: {some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised Sharpe Ratio <span style='color:blue'>(efficient portfolio)</span>: {some_data['Annualised Return (efficient portfolio)']/some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:green'>Return</span> (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:red'>Volatility</span> (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']/some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
             # st.write(f"Max Sharpe Allocation:")
             # st.table(some_data["Max Sharpe Allocation"])
             st.write(f"Max Sharpe Allocation in Percentile:")
@@ -286,9 +286,9 @@ if option == "Portfolio Management":
                 """,
                 unsafe_allow_html=True,
             )
-            st.write(f"Annualised Return <span style='color:green'>(min. variance portfolio)</span>: {some_data['Annualised Return (min variance portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised Volatility <span style='color:red'>(min. variance portfolio)</span>: {some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised Sharpe Ratio <span style='color:blue'>(efficient portfolio)</span>: {some_data['Annualised Return (min variance portfolio)']/some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:green'>Return</span> (min. variance portfolio): {some_data['Annualised Return (min variance portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:red'>Volatility</span> (min. variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
+            st.write(f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {some_data['Annualised Return (min variance portfolio)']/some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
             # st.write(f"Min Volatility Allocation:")
             # st.table(some_data["Min Volatility Allocation"])
             st.write(f"Min Volatility Allocation in Percentile:")
