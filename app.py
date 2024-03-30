@@ -202,7 +202,7 @@ if option == "Portfolio Management":
                 Plot daily returns of the stocks selected: {stocks}
             """
             )
-            st.pyplot(return_figure, use_container_width=True)
+            st.pyplot(return_figure, use_container_width=True, width="80%")
 
             st.success("Efficient portfolio teacheds Mr. Yin what to buy. 💡")
             st.warning(
