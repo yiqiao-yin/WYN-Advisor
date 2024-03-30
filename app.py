@@ -89,7 +89,7 @@ st.sidebar.markdown(
 # Content starts here
 if option == "Portfolio Management":
     if submit_button:
-        col1, col2, col3 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
 
         # List `stocks` is a string of comma-separated stock symbols
         stocks = stocks.split(", ")
