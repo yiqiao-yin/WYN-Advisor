@@ -98,20 +98,24 @@ if option == "Portfolio Management":
             # Get the list of stocks data using the `download_stocks` function
             list_of_stocks = download_stocks(stocks)
             st.success("Downloading latest stock data successfully!")
-    
+
             # Create a DataFrame object from the closing prices of all stocks
             table = pd.DataFrame(
                 [list_of_stocks[j]["Close"] for j in range(len(list_of_stocks))]
             ).transpose()
-    
+
             # Set the column names to be the stocks symbols
             table.columns = stocks
-    
+
             # Filter by date range selected by user
             df = table
             new_index = [df.index[t].date() for t in range(len(df.index))]
-            check1 = tuple([new_index[t] >= start_datetime for t in range(len(new_index))])
-            check2 = tuple([new_index[t] <= end_datetime for t in range(len(new_index))])
+            check1 = tuple(
+                [new_index[t] >= start_datetime for t in range(len(new_index))]
+            )
+            check2 = tuple(
+                [new_index[t] <= end_datetime for t in range(len(new_index))]
+            )
             final_idx = [check1[t] and check2[t] for t in range(len(new_index))]
             filtered_df = df[final_idx]
             if filtered_df.shape[0] > 100:
@@ -122,7 +126,7 @@ if option == "Portfolio Management":
                     "Date range by user not valid, default range (past 2 years) is used."
                 )
                 table = table.tail(255 * 2)
-    
+
             # Get info
             tickers = []
             deltas = []
@@ -133,27 +137,31 @@ if option == "Portfolio Management":
                     ## create Ticker object
                     stock = yf.Ticker(ticker)
                     tickers.append(ticker)
-    
+
                     ## download info
                     info = stock.info
-    
+
                     ## download sector
                     sectors.append(info["sector"])
-    
+
                     ## download daily stock prices for 2 days
                     hist = stock.history("2d")
-    
+
                     ## calculate change in stock price (from a trading day ago)
-                    deltas.append((hist["Close"][1] - hist["Close"][0]) / hist["Close"][0])
-    
+                    deltas.append(
+                        (hist["Close"][1] - hist["Close"][0]) / hist["Close"][0]
+                    )
+
                     ## calculate market cap
-                    market_caps.append(info["sharesOutstanding"] * info["previousClose"])
-    
+                    market_caps.append(
+                        info["sharesOutstanding"] * info["previousClose"]
+                    )
+
                     ## add print statement to ensure code is running
                     print(f"downloaded {ticker}")
                 except Exception as e:
                     print(e)
-    
+
             # Create dataframe for market cap
             df_for_mkt_cap = pd.DataFrame(
                 {
@@ -169,7 +177,7 @@ if option == "Portfolio Management":
                 bins=color_bin,
                 labels=["grey", "skyblue", "lightblue", "lightgreen", "lime", "black"],
             )
-    
+
             # Start new section: Market Cap
             st.markdown(
                 f"""
@@ -184,11 +192,11 @@ if option == "Portfolio Management":
                 model and the market cap is captured using the 2nd factor 'SMB'.
                 """
             )
-    
+
             # Plot heatmap
             fig_market_cap_heatmap = plot_mkt_cap(df=df_for_mkt_cap)
             st.plotly_chart(fig_market_cap_heatmap, use_container_width=True)
-    
+
             # Start new section: Time-series Plot
             st.markdown(
                 f"""
@@ -256,14 +264,14 @@ if option == "Portfolio Management":
                     Note: This is the simplified version of the efficient frontier. In practice, one might consider additional constraints such as no short-selling (i.e., weights must be non-negative) or a requirement that all weights sum to one.
                 """
                 )
-    
+
             returns = table.pct_change()
             mean_returns = returns.mean()
             cov_matrix = returns.cov()
             eff_front_figure, some_data = display_simulated_ef_with_random(
                 table, mean_returns, cov_matrix, num_portfolios, risk_free_rate
             )
-    
+
             # Start new section: Efficient Portfolio
             st.markdown(
                 f"""
@@ -271,14 +279,42 @@ if option == "Portfolio Management":
                 """,
                 unsafe_allow_html=True,
             )
-            st.write(f"Annualised <span style='color:green'>Return</span> (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised <span style='color:red'>Volatility</span> (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']/some_data['Annualised Volatility (efficient portfolio)']}", unsafe_allow_html=True)
+            st.write(
+                f"Annualised <span style='color:green'>Return</span> (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}",
+                unsafe_allow_html=True,
+            )
+            st.write(
+                f"Annualised <span style='color:red'>Volatility</span> (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}",
+                unsafe_allow_html=True,
+            )
+            sharpe_ratio_for_eff_port = np.round(
+                some_data["Annualised Return (efficient portfolio)"]
+                / some_data["Annualised Volatility (efficient portfolio)"],
+                3,
+            )
+            st.write(
+                f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {sharpe_ratio_for_eff_port}",
+                unsafe_allow_html=True,
+            )
+            lower_bound_eff_port = np.round(
+                some_data["Annualised Return (efficient portfolio)"]
+                - 2 * some_data["Annualised Volatility (efficient portfolio)"],
+                3,
+            )
+            upper_bound_eff_port = np.round(
+                some_data["Annualised Return (efficient portfolio)"]
+                + 2 * some_data["Annualised Volatility (efficient portfolio)"],
+                3,
+            )
+            st.write(
+                f"Annualised <span style='color:orange'>confidence Interval</span> (efficient portfolio): [{lower_bound_eff_port}, {upper_bound_eff_port}]",
+                unsafe_allow_html=True,
+            )
             # st.write(f"Max Sharpe Allocation:")
             # st.table(some_data["Max Sharpe Allocation"])
             st.write(f"Max Sharpe Allocation in Percentile:")
             st.table(some_data["Max Sharpe Allocation in Percentile"])
-    
+
             # Start new section: Min Variance Portfolio
             st.markdown(
                 f"""
@@ -286,9 +322,37 @@ if option == "Portfolio Management":
                 """,
                 unsafe_allow_html=True,
             )
-            st.write(f"Annualised <span style='color:green'>Return</span> (min. variance portfolio): {some_data['Annualised Return (min variance portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised <span style='color:red'>Volatility</span> (min. variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
-            st.write(f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {some_data['Annualised Return (min variance portfolio)']/some_data['Annualised Volatility (min variance portfolio)']}", unsafe_allow_html=True)
+            st.write(
+                f"Annualised <span style='color:green'>Return</span> (min. variance portfolio): {some_data['Annualised Return (min variance portfolio)']}",
+                unsafe_allow_html=True,
+            )
+            st.write(
+                f"Annualised <span style='color:red'>Volatility</span> (min. variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}",
+                unsafe_allow_html=True,
+            )
+            sharpe_ratio_for_mv_port = np.round(
+                some_data["Annualised Return (min variance portfolio)"]
+                / some_data["Annualised Volatility (min variance portfolio)"],
+                3,
+            )
+            st.write(
+                f"Annualised <span style='color:blue'>Sharpe Ratio</span> (efficient portfolio): {sharpe_ratio_for_mv_port}",
+                unsafe_allow_html=True,
+            )
+            lower_bound_mv_port = np.round(
+                some_data["Annualised Return (min variance portfolio)"]
+                - 2 * some_data["Annualised Volatility (min variance portfolio)"],
+                3,
+            )
+            upper_bound_mv_port = np.round(
+                some_data["Annualised Return (min variance portfolio)"]
+                + 2 * some_data["Annualised Volatility (min variance portfolio)"],
+                3,
+            )
+            st.write(
+                f"Annualised <span style='color:orange'>confidence Interval</span> (min variance portfolio): [{lower_bound_mv_port}, {upper_bound_mv_port}]",
+                unsafe_allow_html=True,
+            )
             # st.write(f"Min Volatility Allocation:")
             # st.table(some_data["Min Volatility Allocation"])
             st.write(f"Min Volatility Allocation in Percentile:")
@@ -374,10 +438,12 @@ elif option == "Entry Strategy":
                 response = call_chatcompletion(result)
                 st.markdown(response)
             except:
-                st.warning("OpenAI limit reached. We'll manually pull summarized information for you.")
+                st.warning(
+                    "OpenAI limit reached. We'll manually pull summarized information for you."
+                )
                 df = []
                 for key, value in the_stock_info.items():
-                    df.append([key,value])
+                    df.append([key, value])
                 df = pd.DataFrame(df)
                 st.table(df)
             st.success(
@@ -396,12 +462,12 @@ elif option == "Entry Strategy":
 else:
     st.warning("Please select an option and click the submit button!")
 
-# Credit
-from datetime import datetime
 
+# Credit
 def current_year():
     now = datetime.now()
     return now.year
+
 
 # Example usage:
 current_year = current_year()  # This will print the current year
