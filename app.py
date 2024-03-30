@@ -254,8 +254,8 @@ if option == "Portfolio Management":
             """,
             unsafe_allow_html=True,
         )
-        st.write(f"Annualised Return: {some_data['Annualised Return']}")
-        st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
+        st.write(f"Annualised Return (efficient portfolio): {some_data['Annualised Return (efficient portfolio)']}")
+        st.write(f"Annualised Volatility (efficient portfolio): {some_data['Annualised Volatility (efficient portfolio)']}")
         # st.write(f"Max Sharpe Allocation:")
         # st.table(some_data["Max Sharpe Allocation"])
         st.write(f"Max Sharpe Allocation in Percentile:")
@@ -268,8 +268,8 @@ if option == "Portfolio Management":
             """,
             unsafe_allow_html=True,
         )
-        st.write(f"Annualised Return: {some_data['Annualised Return']}")
-        st.write(f"Annualised Volatility: {some_data['Annualised Volatility']}")
+        st.write(f"Annualised Return (min variance portfolio): {some_data['Annualised Return (min variance portfolio)']}")
+        st.write(f"Annualised Volatility (min variance portfolio): {some_data['Annualised Volatility (min variance portfolio)']}")
         # st.write(f"Min Volatility Allocation:")
         # st.table(some_data["Min Volatility Allocation"])
         st.write(f"Min Volatility Allocation in Percentile:")

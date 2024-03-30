@@ -246,14 +246,14 @@ def display_simulated_ef_with_random(
     ax.legend(labelspacing=0.8)
 
     return fig, {
-        "Annualised Return": round(rp, 2),
-        "Annualised Volatility": round(sdp, 2),
+        "Annualised Return (efficient portfolio)": round(rp, 2),
+        "Annualised Volatility (efficient portfolio)": round(sdp, 2),
         "Max Sharpe Allocation": max_sharpe_allocation,
         "Max Sharpe Allocation in Percentile": max_sharpe_allocation.div(
             max_sharpe_allocation.sum(axis=1), axis=0
         ),
-        "Annualised Return": round(rp_min, 2),
-        "Annualised Volatility": round(sdp_min, 2),
+        "Annualised Return (min variance portfolio)": round(rp_min, 2),
+        "Annualised Volatility (min variance portfolio)": round(sdp_min, 2),
         "Min Volatility Allocation": min_vol_allocation,
         "Min Volatility Allocation in Percentile": min_vol_allocation.div(
             min_vol_allocation.sum(axis=1), axis=0
