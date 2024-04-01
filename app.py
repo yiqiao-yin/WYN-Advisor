@@ -33,7 +33,7 @@ option = st.sidebar.selectbox(
     "Which strategy do you want to see?",
     ("--", "Portfolio Management", "Entry Strategy"),
 )
-st.sidebar.write("You selected:", option)
+# st.sidebar.write("You selected:", option)
 
 # More sidebar
 if option == "Portfolio Management":
@@ -41,7 +41,7 @@ if option == "Portfolio Management":
         "Enter stocks (sep. by comma and space, e.g. ', ')",
         "AAPL, META, TSLA, AMZN, AMD, NVDA, TSM, MSFT, GOOGL, NFLX",
     )
-    st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
+    # st.sidebar.write("Discalimer: The first 10 are held by Yiqiao Yin.")
     start_datetime = st.sidebar.date_input("Start date", datetime(2012, 1, 1))
     end_datetime = st.sidebar.date_input("End date", datetime.today())
     st.sidebar.write(
@@ -75,8 +75,7 @@ elif option == "Entry Strategy":
         "Select a range of values to infer margin of error", 0.0, 100.0, (25.0, 75.0)
     )
     with st.sidebar:
-        with st.form(key="my_form"):
-            submit_button = st.form_submit_button(label="Submit!")
+        submit_button = st.form_submit_button(label="Submit!")
 else:
     st.sidebar.write("Please pick an option from above.")
 
